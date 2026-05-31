@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ad Hoc Agile Consulting</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue:       #1a6bbf;
+    --blue-light: #2e8de0;
+    --blue-pale:  #e6f1fb;
+    --green:      #4db848;
+    --green-dark: #2e7d32;
+    --dark:       #1e2a38;
+    --dark2:      #253447;
+    --ink:        #1c2430;
+    --ink2:       #3d4f63;
+    --ink3:       #6b7d90;
+    --surface:    #f4f7fa;
+    --surface2:   #edf1f6;
+    --border:     rgba(30,42,56,0.10);
+    --border2:    rgba(30,42,56,0.16);
+    --white:      #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    background: #fff;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.4;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 64px;
+    background: rgba(30,42,56,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { width: 34px; height: 34px; object-fit: contain; }
+  .nav-logo-text { font-size: 16px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
+  .nav-logo-text span { color: var(--green); }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.65);
+    text-decoration: none; letter-spacing: 0.01em; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-cta {
+    background: var(--blue); color: #fff !important; padding: 8px 18px;
+    border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--blue-light) !important; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    background: var(--dark);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 100px 48px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(26,107,191,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,107,191,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-gradient {
+    position: absolute; inset: 0; z-index: 1;
+    background: radial-gradient(ellipse 60% 80% at 70% 50%, rgba(26,107,191,0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 20% 80%, rgba(77,184,72,0.10) 0%, transparent 70%);
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 780px; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 600; color: var(--green);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    margin-bottom: 28px;
+    padding: 5px 12px; border: 0.5px solid rgba(77,184,72,0.3);
+    border-radius: 20px; background: rgba(77,184,72,0.08);
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity:1;transform:scale(1) } 50% { opacity:0.5;transform:scale(1.4) } }
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(42px, 6vw, 76px);
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .hero-title em {
+    font-style: italic; color: var(--green);
+  }
+  .hero-sub {
+    font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.6);
+    line-height: 1.65; max-width: 560px; margin-bottom: 44px;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue); color: #fff;
+    padding: 14px 28px; border-radius: 8px;
+    font-size: 14px; font-weight: 600; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-1px); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.85);
+    padding: 14px 28px; border-radius: 8px;
+    font-size: 14px; font-weight: 500; text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.06); }
+  .hero-stats {
+    position: relative; z-index: 2;
+    display: flex; gap: 48px; margin-top: 72px;
+    padding-top: 40px; border-top: 0.5px solid rgba(255,255,255,0.08);
+  }
+  .hero-stat-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 36px; font-weight: 500; color: #fff; line-height: 1;
+  }
+  .hero-stat-val span { color: var(--green); }
+  .hero-stat-lbl { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 5px; }
+
+  /* ─── SECTION COMMONS ─── */
+  section { position: relative; }
+  .section-inner { max-width: 1100px; margin: 0 auto; padding: 96px 48px; }
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 700; color: var(--blue);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    margin-bottom: 14px;
+  }
+  .section-eyebrow::before { content: '–'; color: var(--green); font-weight: 700; }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 400; color: var(--ink);
+    line-height: 1.15; letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .section-title em { font-style: italic; color: var(--blue); }
+  .section-desc { font-size: 16px; color: var(--ink3); line-height: 1.7; max-width: 560px; }
+
+  /* ─── APPROACH ─── */
+  .approach { background: var(--surface); }
+  .approach-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+    align-items: center; margin-top: 56px;
+  }
+  .approach-items { display: flex; flex-direction: column; gap: 4px; }
+  .approach-item {
+    display: grid; grid-template-columns: 48px 1fr;
+    align-items: start; gap: 16px;
+    padding: 20px 0; border-bottom: 0.5px solid var(--border2);
+  }
+  .approach-item:last-child { border-bottom: none; }
+  .ai-num {
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+    color: var(--blue); margin-top: 4px;
+  }
+  .ai-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+  .ai-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; }
+  .approach-visual {
+    background: var(--dark); border-radius: 16px; padding: 36px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .av-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .av-bar-row { display: flex; align-items: center; gap: 10px; }
+  .av-bar-name { font-size: 12px; color: rgba(255,255,255,0.75); width: 100px; flex-shrink: 0; }
+  .av-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+  .av-bar-fill { height: 100%; border-radius: 3px; }
+  .av-bar-pct { font-size: 11px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.4); width: 32px; text-align: right; flex-shrink: 0; }
+
+  /* ─── SERVICES ─── */
+  .services-header { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; margin-bottom: 48px; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .service-card {
+    border-radius: 12px; border: 0.5px solid var(--border2); padding: 28px;
+    background: #fff; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--card-color, var(--blue));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .service-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(30,42,56,0.1); border-color: rgba(26,107,191,0.2); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .svc-icon-wrap {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 16px;
+    background: var(--card-bg, #e6f1fb);
+  }
+  .svc-name { font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.3; }
+  .svc-desc { font-size: 13px; color: var(--ink2); line-height: 1.65; margin-bottom: 16px; }
+  .svc-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .svc-tag {
+    font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 4px;
+    background: var(--surface); color: var(--ink3); border: 0.5px solid var(--border2);
+  }
+
+  /* ─── TOOLS ─── */
+  .tools { background: var(--dark); }
+  .tools .section-title { color: #fff; }
+  .tools .section-desc { color: rgba(255,255,255,0.5); }
+  .tools-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .tool-pill {
+    display: flex; align-items: center; gap: 7px;
+    padding: 9px 16px; border-radius: 8px;
+    background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.1);
+    font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8);
+    transition: background 0.2s;
+  }
+  .tool-pill:hover { background: rgba(255,255,255,0.1); }
+  .tool-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ─── CHEATSHEETS ─── */
+  .cheatsheets { background: var(--surface); }
+  .cs-intro { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; margin-bottom: 36px; }
+  .cs-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .cs-card {
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 16px; border-radius: 10px;
+    background: #fff; border: 0.5px solid var(--border2);
+    text-decoration: none; color: inherit;
+    transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+    position: relative; overflow: hidden;
+  }
+  .cs-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 60%, var(--card-accent, var(--blue)) 200%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .cs-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(30,42,56,0.1); border-color: var(--card-accent, var(--blue)); }
+  .cs-card:hover::after { opacity: 0.04; }
+  .cs-tag {
+    display: inline-block; font-size: 9px; font-weight: 700;
+    padding: 2px 7px; border-radius: 4px; border: 0.5px solid;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .cs-title { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+  .cs-desc { font-size: 11px; color: var(--ink3); line-height: 1.5; flex: 1; }
+  .cs-link { font-size: 11px; font-weight: 600; color: var(--blue); display: flex; align-items: center; gap: 4px; }
+  .cs-arrow { transition: transform 0.2s; }
+  .cs-card:hover .cs-arrow { transform: translateX(3px); }
+  .cs-add-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; padding: 16px; border-radius: 10px;
+    background: rgba(26,107,191,0.04); border: 1.5px dashed rgba(26,107,191,0.25);
+    color: var(--ink3); font-size: 12px; text-align: center;
+    min-height: 120px;
+  }
+  .cs-add-icon { font-size: 20px; opacity: 0.4; }
+
+  /* ─── TRAINING ─── */
+  .training-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
+  .training-card {
+    border-radius: 12px; overflow: hidden; border: 0.5px solid var(--border2);
+    display: grid; grid-template-columns: 5px 1fr;
+  }
+  .tc-stripe { }
+  .tc-body { padding: 22px 24px; background: #fff; }
+  .tc-icon { font-size: 24px; margin-bottom: 10px; }
+  .tc-name { font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+  .tc-desc { font-size: 13px; color: var(--ink2); line-height: 1.65; margin-bottom: 12px; }
+  .tc-items { display: flex; flex-direction: column; gap: 4px; }
+  .tc-item { font-size: 12px; color: var(--ink2); padding-left: 14px; position: relative; line-height: 1.5; }
+  .tc-item::before { content: '→'; position: absolute; left: 0; color: var(--blue); font-weight: 600; }
+
+  /* ─── CONTACT ─── */
+  .contact { background: var(--dark); }
+  .contact .section-title { color: #fff; }
+  .contact .section-desc { color: rgba(255,255,255,0.55); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-top: 56px; }
+  .contact-form { display: flex; flex-direction: column; gap: 14px; }
+  .cf-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; display: block; }
+  .cf-input, .cf-textarea {
+    width: 100%; padding: 12px 16px;
+    background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.12);
+    border-radius: 8px; font-size: 14px; color: #fff; font-family: 'DM Sans', sans-serif;
+    outline: none; transition: border-color 0.2s;
+  }
+  .cf-input:focus, .cf-textarea:focus { border-color: rgba(26,107,191,0.6); background: rgba(255,255,255,0.08); }
+  .cf-textarea { resize: vertical; min-height: 110px; }
+  .cf-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cf-submit {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--blue); color: #fff; border: none; cursor: pointer;
+    padding: 14px 28px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif; transition: background 0.2s;
+  }
+  .cf-submit:hover { background: var(--blue-light); }
+  .contact-info { display: flex; flex-direction: column; gap: 20px; padding-top: 8px; }
+  .ci-block { border-left: 2px solid rgba(255,255,255,0.1); padding-left: 20px; }
+  .ci-label { font-size: 10px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
+  .ci-value { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.5; }
+  .ci-sub   { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #111820; padding: 28px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 0.5px solid rgba(255,255,255,0.06);
+  }
+  .ft-logo { display: flex; align-items: center; gap: 9px; }
+  .ft-logo img { width: 28px; height: 28px; object-fit: contain; opacity: 0.8; }
+  .ft-logo-txt { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.5); }
+  .ft-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
+  .ft-links { display: flex; gap: 24px; }
+  .ft-links a { font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none; }
+  .ft-links a:hover { color: rgba(255,255,255,0.7); }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 80px 20px 60px; }
+    .section-inner { padding: 64px 20px; }
+    .approach-grid, .services-grid, .training-grid, .contact-grid { grid-template-columns: 1fr; }
+    .cs-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    .services-header { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 14px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-text">Ad Hoc <span>Agile</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="#about">Sobre</a>
+    <a href="#services">Serviços</a>
+    <a href="#training">Treinamentos</a>
+    <a href="#resources">Recursos</a>
+    <a href="#contact" class="nav-cta">Fale conosco</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-gradient"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Consultoria Ágil de Alta Performance</div>
+    <h1 class="hero-title">
+      Processos leves.<br>
+      Times <em>fortes.</em>
+    </h1>
+    <p class="hero-sub">
+      Estruturação de processos, desenvolvimento de equipes e implementação de práticas modernas de gestão orientadas a valor. Clareza, eficiência e autonomia para os seus times.
+    </p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary">Ver serviços →</a>
+      <a href="#resources" class="btn-outline">Recursos gratuitos</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-val">10<span>+</span></div>
+      <div class="hero-stat-lbl">Metodologias dominadas</div>
+    </div>
+    <div>
+      <div class="hero-stat-val">360<span>°</span></div>
+      <div class="hero-stat-lbl">Da estratégia à execução</div>
+    </div>
+    <div>
+      <div class="hero-stat-val">∞</div>
+      <div class="hero-stat-lbl">Melhoria contínua</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / APPROACH -->
+<section id="about" class="approach">
+  <div class="section-inner">
+    <div class="approach-grid">
+      <div>
+        <div class="section-eyebrow reveal">Nossa abordagem</div>
+        <h2 class="section-title reveal">Consultoria que<br><em>implementa de verdade</em></h2>
+        <p class="section-desc reveal">A atuação combina consultoria, facilitação, treinamento e implementação técnica. Não entregamos relatórios — entregamos times funcionando.</p>
+        <div class="approach-items" style="margin-top:36px">
+          <div class="approach-item reveal">
+            <div class="ai-num">01</div>
+            <div><div class="ai-title">Diagnóstico honesto</div><div class="ai-desc">Mapeamos o fluxo atual, identificamos gargalos reais e priorizamos por impacto — sem jargão, sem suposições.</div></div>
+          </div>
+          <div class="approach-item reveal">
+            <div class="ai-num">02</div>
+            <div><div class="ai-title">Implementação lado a lado</div><div class="ai-desc">Trabalhamos junto aos times na parametrização de ferramentas, criação de fluxos e adoção de práticas ágeis.</div></div>
+          </div>
+          <div class="approach-item reveal">
+            <div class="ai-num">03</div>
+            <div><div class="ai-title">Autonomia como meta</div><div class="ai-desc">O objetivo é que o cliente não precise mais de nós. Transferência de conhecimento em cada etapa do engajamento.</div></div>
+          </div>
+          <div class="approach-item reveal">
+            <div class="ai-num">04</div>
+            <div><div class="ai-title">Métricas que importam</div><div class="ai-desc">Lead Time, Throughput, CFD e OKRs. Decisões baseadas em dados — não em opiniões ou intuição.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="approach-visual reveal">
+        <div class="av-label">Perfil de atuação</div>
+        <div class="av-bar-row">
+          <div class="av-bar-name">Consultoria</div>
+          <div class="av-bar-track"><div class="av-bar-fill" style="width:90%;background:var(--blue)"></div></div>
+        </div>
+        <div class="av-bar-row">
+          <div class="av-bar-name">Facilitação</div>
+          <div class="av-bar-track"><div class="av-bar-fill" style="width:85%;background:#2e7d9a"></div></div>
+        </div>
+        <div class="av-bar-row">
+          <div class="av-bar-name">Treinamento</div>
+          <div class="av-bar-track"><div class="av-bar-fill" style="width:80%;background:#2e7d32"></div></div>
+        </div>
+        <div class="av-bar-row">
+          <div class="av-bar-name">Impl. técnica</div>
+          <div class="av-bar-track"><div class="av-bar-fill" style="width:75%;background:#c8530a"></div></div>
+        </div>
+        <div style="height:1px;background:rgba(255,255,255,0.07);margin:16px 0"></div>
+        <div class="av-label">Áreas de especialidade</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">
+          <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(26,107,191,0.2);color:#6db3f2;font-weight:600">Agile</span>
+          <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(46,125,50,0.2);color:#6dd46d;font-weight:600">Lean</span>
+          <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(107,63,160,0.2);color:#c8a0f0;font-weight:600">OKRs</span>
+          <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(200,83,10,0.2);color:#f4a56a;font-weight:600">BPM</span>
+          <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(45,125,154,0.2);color:#7ecfe0;font-weight:600">Kanban</span>
+          <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(196,122,10,0.2);color:#f4c060;font-weight:600">Scrum</span>
+          <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(15,45,87,0.3);color:#6db3f2;font-weight:600">SAFe</span>
+          <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(46,125,50,0.2);color:#6dd46d;font-weight:600">DevOps</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <div class="services-header">
+      <div>
+        <div class="section-eyebrow reveal">Serviços</div>
+        <h2 class="section-title reveal">O que fazemos<br><em>na prática</em></h2>
+      </div>
+      <p class="section-desc reveal" style="max-width:340px">Da estratégia ao board configurado — com os times operando de forma autônoma ao final do engajamento.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal" style="--card-color:#1a6bbf;--card-bg:#e6f1fb">
+        <div class="svc-icon-wrap">🔄</div>
+        <div class="svc-name">Consultoria Ágil</div>
+        <div class="svc-desc">Agile, Scrum, Kanban e Lean Inception. Diagnóstico, implementação e acompanhamento de práticas ágeis adaptadas ao contexto do cliente.</div>
+        <div class="svc-tags">
+          <span class="svc-tag">Scrum</span>
+          <span class="svc-tag">Kanban</span>
+          <span class="svc-tag">Lean Inception</span>
+          <span class="svc-tag">SAFe</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="--card-color:#2e7d32;--card-bg:#eaf3de">
+        <div class="svc-icon-wrap">📊</div>
+        <div class="svc-name">Gestão de Projetos e Portfólio</div>
+        <div class="svc-desc">Estruturação e otimização da gestão de projetos. Governança, priorização (WSJF, MoSCoW, RICE) e visibilidade de portfólio para liderança.</div>
+        <div class="svc-tags">
+          <span class="svc-tag">Portfólio</span>
+          <span class="svc-tag">Governança</span>
+          <span class="svc-tag">OKRs</span>
+          <span class="svc-tag">Priorização</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="--card-color:#6b3fa0;--card-bg:#f3eeff">
+        <div class="svc-icon-wrap">⚙️</div>
+        <div class="svc-name">Ferramentas e Automações</div>
+        <div class="svc-desc">Parametrização e arquitetura de sistemas em Jira, Asana, Monday.com, ClickUp e Notion. Fluxos de trabalho, automações e governança completa.</div>
+        <div class="svc-tags">
+          <span class="svc-tag">Jira</span>
+          <span class="svc-tag">Notion</span>
+          <span class="svc-tag">Monday</span>
+          <span class="svc-tag">ClickUp</span>
+          <span class="svc-tag">Asana</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="--card-color:#c8530a;--card-bg:#fdebd8">
+        <div class="svc-icon-wrap">🗺️</div>
+        <div class="svc-name">Mapeamento de Processos</div>
+        <div class="svc-desc">Mapeamento e melhoria de processos com Lean e BPM. Identificação de desperdícios, redesenho de fluxos e implementação de melhorias mensuráveis.</div>
+        <div class="svc-tags">
+          <span class="svc-tag">Lean</span>
+          <span class="svc-tag">BPM</span>
+          <span class="svc-tag">VSM</span>
+          <span class="svc-tag">BPMN</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="--card-color:#2d7d9a;--card-bg:#e0f4f8">
+        <div class="svc-icon-wrap">📈</div>
+        <div class="svc-name">Métricas e Dashboards</div>
+        <div class="svc-desc">Implementação de métricas de fluxo e desempenho: Lead Time, Throughput, CFD, OKRs. Dashboards que suportam decisões baseadas em dados reais.</div>
+        <div class="svc-tags">
+          <span class="svc-tag">Lead Time</span>
+          <span class="svc-tag">CFD</span>
+          <span class="svc-tag">Throughput</span>
+          <span class="svc-tag">OKRs</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="--card-color:#c47a0a;--card-bg:#fdf0d5">
+        <div class="svc-icon-wrap">🎯</div>
+        <div class="svc-name">Org Design Ágil</div>
+        <div class="svc-desc">Estruturação de times ágeis com modelo Spotify (Squads, Tribes, Chapters). Design organizacional orientado à autonomia e ao fluxo de valor.</div>
+        <div class="svc-tags">
+          <span class="svc-tag">Squads</span>
+          <span class="svc-tag">Tribes</span>
+          <span class="svc-tag">Health Check</span>
+          <span class="svc-tag">CoP</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="tools">
+  <div class="section-inner">
+    <div class="section-eyebrow" style="color:var(--green)">Ferramentas</div>
+    <h2 class="section-title reveal">Stack que dominamos</h2>
+    <p class="section-desc reveal">Implementação técnica real — não apenas consultoria teórica sobre as ferramentas.</p>
+    <div class="tools-row reveal">
+      <div class="tool-pill"><div class="tool-dot" style="background:#0052CC"></div>Jira Software</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#F06A35"></div>Asana</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#F62B54"></div>Monday.com</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#7B68EE"></div>ClickUp</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#000000"></div>Notion</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#4db848"></div>Miro</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#1a6bbf"></div>Confluence</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#e08020"></div>Datadog</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#E05D44"></div>Grafana</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#4479A1"></div>GitHub</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#FF6B6B"></div>GitLab</div>
+      <div class="tool-pill"><div class="tool-dot" style="background:#2EB67D"></div>Slack</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINING -->
+<section id="training">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Desenvolvimento</div>
+    <h2 class="section-title reveal">Treinamentos &<br><em>capacitação</em></h2>
+    <p class="section-desc reveal">Formação prática de times e líderes. Não apenas teoria — workshops que mudam comportamento.</p>
+    <div class="training-grid">
+      <div class="training-card reveal">
+        <div class="tc-stripe" style="background:var(--blue)"></div>
+        <div class="tc-body">
+          <div class="tc-icon">🧩</div>
+          <div class="tc-name">Formação de Times Ágeis</div>
+          <div class="tc-desc">Capacitação completa para times que estão iniciando ou evoluindo sua maturidade ágil. Foco em práticas reais, não em cerimônias vazias.</div>
+          <div class="tc-items">
+            <div class="tc-item">Scrum, Kanban e Lean na prática</div>
+            <div class="tc-item">Rituais ágeis funcionais e sem desperdício</div>
+            <div class="tc-item">Métricas de fluxo aplicadas ao contexto do time</div>
+            <div class="tc-item">Definition of Done e critérios de qualidade</div>
+          </div>
+        </div>
+      </div>
+      <div class="training-card reveal">
+        <div class="tc-stripe" style="background:#6b3fa0"></div>
+        <div class="tc-body">
+          <div class="tc-icon">🏆</div>
+          <div class="tc-name">Capacitação de Coaches e Scrum Masters</div>
+          <div class="tc-desc">Formação avançada para Agile Coaches, Scrum Masters e Product Owners. Ferramentas, facilitation skills e como gerar impacto real no time.</div>
+          <div class="tc-items">
+            <div class="tc-item">Técnicas avançadas de facilitação</div>
+            <div class="tc-item">Coaching de times e gestão de conflitos</div>
+            <div class="tc-item">Métricas e diagnóstico de saúde do time</div>
+            <div class="tc-item">Roadmap de evolução de maturidade ágil</div>
+          </div>
+        </div>
+      </div>
+      <div class="training-card reveal">
+        <div class="tc-stripe" style="background:#c8530a"></div>
+        <div class="tc-body">
+          <div class="tc-icon">🔭</div>
+          <div class="tc-name">Workshops de Discovery e Produto</div>
+          <div class="tc-desc">Lean Inception, Design Thinking, priorização e discovery de produto. Da ideia ao backlog estruturado em sessões práticas.</div>
+          <div class="tc-items">
+            <div class="tc-item">Lean Inception (5 dias)</div>
+            <div class="tc-item">Design Thinking e HMW</div>
+            <div class="tc-item">Métodos de priorização (RICE, WSJF, MoSCoW)</div>
+            <div class="tc-item">OKRs e definição de métricas de sucesso</div>
+          </div>
+        </div>
+      </div>
+      <div class="training-card reveal">
+        <div class="tc-stripe" style="background:#2e7d32"></div>
+        <div class="tc-body">
+          <div class="tc-icon">🎓</div>
+          <div class="tc-name">Liderança Ágil para Gestores</div>
+          <div class="tc-desc">Programa específico para gestores e diretores que precisam liderar em ambientes ágeis sem perder sua essência de liderança.</div>
+          <div class="tc-items">
+            <div class="tc-item">Servant leadership e gestão pelo contexto</div>
+            <div class="tc-item">OKRs e governança de portfólio</div>
+            <div class="tc-item">Como delegar com alinhamento (Modelo Spotify)</div>
+            <div class="tc-item">Cultura de dados e tomada de decisão ágil</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHEATSHEETS -->
+<section id="resources" class="cheatsheets">
+  <div class="section-inner">
+    <div class="cs-intro">
+      <div>
+        <div class="section-eyebrow reveal">Recursos gratuitos</div>
+        <h2 class="section-title reveal">Cheatsheets para<br><em>referência rápida</em></h2>
+        <p class="section-desc reveal">Material de referência produzido pela Ad Hoc para times e profissionais ágeis. Aberto, gratuito e sempre atualizado.</p>
+      </div>
+      <div style="text-align:right" class="reveal">
+        <div style="font-family:'DM Mono',monospace;font-size:32px;font-weight:500;color:var(--blue);line-height:1">10</div>
+        <div style="font-size:12px;color:var(--ink3);margin-top:3px">cheatsheets<br>disponíveis</div>
+      </div>
+    </div>
+    <div class="cs-grid">
+      
+        <a class="cs-card" href="kanban_cheatsheet_adhoc.html" target="_blank" style="--card-accent:#1a6bbf">
+          <div class="cs-tag" style="background:#1a6bbf20;color:#1a6bbf;border-color:#1a6bbf40">Gestão de Fluxo</div>
+          <div class="cs-title">Kanban</div>
+          <div class="cs-desc">Board, CFD, classes de serviço e cerimônias</div>
+          <div class="cs-link">Abrir cheatsheet <span class="cs-arrow">→</span></div>
+        </a>
+        <a class="cs-card" href="lean_inception_cheatsheet.html" target="_blank" style="--card-accent:#2e7d32">
+          <div class="cs-tag" style="background:#2e7d3220;color:#2e7d32;border-color:#2e7d3240">Discovery</div>
+          <div class="cs-title">Lean Inception</div>
+          <div class="cs-desc">Agenda dos 5 dias, personas, canvas MVP e sequenciador</div>
+          <div class="cs-link">Abrir cheatsheet <span class="cs-arrow">→</span></div>
+        </a>
+        <a class="cs-card" href="okr_cheatsheet.html" target="_blank" style="--card-accent:#6b3fa0">
+          <div class="cs-tag" style="background:#6b3fa020;color:#6b3fa0;border-color:#6b3fa040">Estratégia</div>
+          <div class="cs-title">OKRs</div>
+          <div class="cs-desc">Objectives, Key Results, scoring e cadência</div>
+          <div class="cs-link">Abrir cheatsheet <span class="cs-arrow">→</span></div>
+        </a>
+        <a class="cs-card" href="design_thinking_cheatsheet.html" target="_blank" style="--card-accent:#c8530a">
+          <div class="cs-tag" style="background:#c8530a20;color:#c8530a;border-color:#c8530a40">Inovação</div>
+          <div class="cs-title">Design Thinking</div>
+          <div class="cs-desc">5 fases, HMW, prototipagem e testes com usuários</div>
+          <div class="cs-link">Abrir cheatsheet <span class="cs-arrow">→</span></div>
+        </a>
+        <a class="cs-card" href="priorizacao_cheatsheet.html" target="_blank" style="--card-accent:#c47a0a">
+          <div class="cs-tag" style="background:#c47a0a20;color:#c47a0a;border-color:#c47a0a40">Product Management</div>
+          <div class="cs-title">Priorização</div>
+          <div class="cs-desc">RICE, WSJF, Matriz Impacto×Esforço e MoSCoW</div>
+          <div class="cs-link">Abrir cheatsheet <span class="cs-arrow">→</span></div>
+        </a>
+        <a class="cs-card" href="safe_cheatsheet.html" target="_blank" style="--card-accent:#0f2d57">
+          <div class="cs-tag" style="background:#0f2d5720;color:#0f2d57;border-color:#0f2d5740">Escalabilidade</div>
+          <div class="cs-title">SAFe — ART & acima</div>
+          <div class="cs-desc">Portfolio, Large Solution, ART, PI Planning e DORA</div>
+          <div class="cs-link">Abrir cheatsheet <span class="cs-arrow">→</span></div>
+        </a>
+        <a class="cs-card" href="lean_cheatsheet.html" target="_blank" style="--card-accent:#2d7d9a">
+          <div class="cs-tag" style="background:#2d7d9a20;color:#2d7d9a;border-color:#2d7d9a40">Lean</div>
+          <div class="cs-title">Lean Manufacturing</div>
+          <div class="cs-desc">3M, 8 desperdícios, Pareto, Kaizen e PDCA</div>
+          <div class="cs-link">Abrir cheatsheet <span class="cs-arrow">→</span></div>
+        </a>
+        <a class="cs-card" href="sdlc_cicd_devops_cheatsheet.html" target="_blank" style="--card-accent:#1e5631">
+          <div class="cs-tag" style="background:#1e563120;color:#1e5631;border-color:#1e563140">DevOps</div>
+          <div class="cs-title">SDLC · CI/CD · DevOps</div>
+          <div class="cs-desc">Ciclo de software, pipelines e DORA metrics</div>
+          <div class="cs-link">Abrir cheatsheet <span class="cs-arrow">→</span></div>
+        </a>
+        <a class="cs-card" href="gestao_conhecimento_cheatsheet.html" target="_blank" style="--card-accent:#6b3fa0">
+          <div class="cs-tag" style="background:#6b3fa020;color:#6b3fa0;border-color:#6b3fa040">Conhecimento</div>
+          <div class="cs-title">Gestão do Conhecimento</div>
+          <div class="cs-desc">DIKW, SECI, CoP, maturidade e ferramentas</div>
+          <div class="cs-link">Abrir cheatsheet <span class="cs-arrow">→</span></div>
+        </a>
+        <a class="cs-card" href="spotify_model_cheatsheet.html" target="_blank" style="--card-accent:#1a6bbf">
+          <div class="cs-tag" style="background:#1a6bbf20;color:#1a6bbf;border-color:#1a6bbf40">Org Design</div>
+          <div class="cs-title">Modelo Spotify</div>
+          <div class="cs-desc">Squads, Tribes, Chapters, Guilds e Health Check</div>
+          <div class="cs-link">Abrir cheatsheet <span class="cs-arrow">→</span></div>
+        </a>
+      <div class="cs-add-card">
+        <div class="cs-add-icon">＋</div>
+        <div style="font-size:11px;font-weight:600;color:var(--ink2)">Em breve</div>
+        <div style="font-size:10px;color:var(--ink3)">Novos materiais sendo adicionados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="section-inner">
+    <div class="section-eyebrow" style="color:var(--green)">Contato</div>
+    <h2 class="section-title reveal">Vamos conversar<br>sobre seu <em>desafio</em></h2>
+
+    <div class="contact-grid">
+      <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+        <div class="cf-group">
+          <div>
+            <label class="cf-label">Nome</label>
+            <input class="cf-input" type="text" placeholder="Seu nome" required>
+          </div>
+          <div>
+            <label class="cf-label">Empresa</label>
+            <input class="cf-input" type="text" placeholder="Nome da empresa">
+          </div>
+        </div>
+        <div>
+          <label class="cf-label">E-mail</label>
+          <input class="cf-input" type="email" placeholder="seu@email.com" required>
+        </div>
+        <div>
+          <label class="cf-label">Como podemos ajudar?</label>
+          <textarea class="cf-textarea" placeholder="Descreva brevemente o desafio ou projeto..."></textarea>
+        </div>
+        <button type="submit" class="cf-submit">Enviar mensagem →</button>
+        <div id="form-success" style="display:none;font-size:13px;color:var(--green);margin-top:4px">✓ Mensagem enviada! Retornamos em até 24h.</div>
+      </form>
+      <div class="contact-info reveal">
+        <div class="ci-block">
+          <div class="ci-label">Localização</div>
+          <div class="ci-value">Brasil</div>
+          <div class="ci-sub">Atendimento presencial e remoto</div>
+        </div>
+        <div class="ci-block">
+          <div class="ci-label">Resposta</div>
+          <div class="ci-value">Até 24 horas úteis</div>
+          
+        </div>
+        <div class="ci-block">
+          <div class="ci-label">Formato de trabalho</div>
+          <div class="ci-value">Consultoria · Workshops<br>Treinamentos · Implementação</div>
+          <div class="ci-sub">Projetos pontuais ou engajamentos longos</div>
+        </div>
+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-logo">
+    <span class="ft-logo-txt">Ad Hoc Agile Consulting</span>
+  </div>
+  <div class="ft-copy">© 2025 Ad Hoc Agile Consulting · Processos leves. Times fortes.</div>
+  <div class="ft-links">
+    <a href="#services">Serviços</a>
+    <a href="#resources">Recursos</a>
+    <a href="#contact">Contato</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // stagger children
+        const children = e.target.querySelectorAll('.reveal:not(.visible)');
+        children.forEach((c, i) => {
+          setTimeout(() => c.classList.add('visible'), i * 80);
+        });
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Also observe parent sections to trigger children
+  document.querySelectorAll('section, .approach-grid, .services-grid, .training-grid, .cs-grid, .contact-grid').forEach(el => observer.observe(el));
+
+  // Form handler
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('form-success').style.display = 'block';
+    e.target.reset();
+    setTimeout(() => {
+      document.getElementById('form-success').style.display = 'none';
+    }, 5000);
+  }
+
+  // Smooth active nav
+  const sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current
+        ? 'rgba(255,255,255,0.95)' : '';
+    });
+  });
+</script>
+</body>
+</html>
