@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanban Cheatsheet — Ad Hoc Agile Consulting</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:       #1a6bbf;
+    --blue-light: #2e8de0;
+    --blue-pale:  #e6f1fb;
+    --green:      #4db848;
+    --green-dark: #2e7d32;
+    --green-pale: #eaf3de;
+    --dark:       #1e2a38;
+    --mid:        #2c3e50;
+    --slate:      #4a5568;
+    --teal:       #2d7d9a;
+    --amber:      #e08020;
+    --amber-pale: #faeeda;
+    --red:        #c0392b;
+    --red-pale:   #fcebeb;
+    --ink:        #1c2430;
+    --ink2:       #3d4f63;
+    --ink3:       #6b7d90;
+    --surface:    #f4f7fa;
+    --surface2:   #edf1f6;
+    --border:     rgba(30,42,56,0.10);
+    --border2:    rgba(30,42,56,0.18);
+  }
+
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { margin: 0; box-shadow: none; border-radius: 0; }
+  }
+
+  body {
+    background: #dce4ed;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    padding: 32px 20px;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 48px rgba(30,42,56,0.18);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--dark);
+    padding: 28px 36px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-logo { flex-shrink: 0; }
+  .header-text .title {
+    font-size: 22px; font-weight: 600; color: #fff; letter-spacing: -0.3px; line-height: 1.2;
+  }
+  .header-text .sub {
+    font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; letter-spacing: 0.04em;
+  }
+  .header-badge {
+    background: rgba(255,255,255,0.08);
+    border: 0.5px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 8px 14px;
+    text-align: center;
+  }
+  .header-badge .badge-val { font-size: 18px; font-weight: 600; color: #4db848; }
+  .header-badge .badge-lbl { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+
+  /* ── BODY ── */
+  .body { padding: 28px 36px 36px; }
+
+  .section-label {
+    font-size: 10px; font-weight: 600; color: var(--ink3);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 22px 0; }
+
+  /* ── BOARD ── */
+  .board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 0; }
+  .col { border-radius: 10px; overflow: hidden; border: 0.5px solid var(--border2); }
+  .col-head {
+    padding: 7px 10px; font-size: 11px; font-weight: 600;
+    color: #fff; display: flex; align-items: center; justify-content: space-between;
+  }
+  .col-backlog .col-head { background: var(--slate); }
+  .col-todo   .col-head { background: var(--blue); }
+  .col-doing  .col-head { background: var(--teal); }
+  .col-done   .col-head { background: var(--green-dark); }
+  .wip-pill {
+    font-size: 9px; background: rgba(255,255,255,0.2);
+    padding: 1px 5px; border-radius: 3px;
+  }
+  .col-body {
+    background: var(--surface); padding: 7px;
+    display: flex; flex-direction: column; gap: 5px; min-height: 76px;
+  }
+  .mini-card {
+    background: #fff; border: 0.5px solid var(--border2);
+    border-radius: 6px; padding: 6px 8px; font-size: 10px;
+    color: var(--ink2); line-height: 1.4;
+  }
+  .mini-tag {
+    display: inline-block; font-size: 9px; font-weight: 600;
+    padding: 1px 5px; border-radius: 3px; margin-bottom: 3px;
+  }
+  .mt-feat { background: var(--blue-pale); color: #0c447c; }
+  .mt-bug  { background: var(--red-pale);  color: #791f1f; }
+  .mt-chore{ background: var(--green-pale);color: #27500a; }
+
+  /* ── FLOW ── */
+  .flow { display: flex; align-items: center; gap: 4px; margin-bottom: 0; }
+  .flow-step {
+    flex: 1; text-align: center; font-size: 10px; font-weight: 600;
+    padding: 7px 4px; border-radius: 6px; color: #fff;
+  }
+  .fs-1 { background: var(--slate); }
+  .fs-2 { background: var(--blue); }
+  .fs-3 { background: var(--teal); }
+  .fs-4 { background: var(--green-dark); }
+  .flow-arrow { color: var(--ink3); font-size: 14px; flex-shrink: 0; }
+
+  /* ── WIP LIMITS ── */
+  .wip-row { display: flex; gap: 7px; flex-wrap: wrap; }
+  .wip-tag {
+    font-size: 11px; border: 0.5px solid var(--border2);
+    border-radius: 5px; padding: 4px 11px; color: var(--ink2);
+    background: var(--surface);
+  }
+  .wip-tag span { font-weight: 600; color: var(--blue); }
+
+  /* ── 2-COL GRID ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .box {
+    background: var(--surface); border: 0.5px solid var(--border2);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .box-title {
+    font-size: 12px; font-weight: 600; color: var(--ink);
+    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-blue  { background: var(--blue); }
+  .dot-green { background: var(--green); }
+  .rule { font-size: 11px; color: var(--ink2); margin-bottom: 5px; padding-left: 14px; position: relative; line-height: 1.5; }
+  .rule::before { content: "→"; position: absolute; left: 0; color: var(--blue); font-weight: 500; }
+
+  /* ── METRICS ── */
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .metric {
+    background: var(--surface); border-radius: 10px;
+    padding: 11px 13px; border: 0.5px solid var(--border2);
+  }
+  .metric-val { font-size: 22px; font-weight: 600; color: var(--blue-light); line-height: 1; font-family: 'DM Mono', monospace; }
+  .metric-lbl { font-size: 10px; color: var(--ink3); margin-top: 3px; line-height: 1.4; }
+
+  /* ── CEREMONIES ── */
+  .ceremonies { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .cer { border-radius: 10px; border: 0.5px solid var(--border2); overflow: hidden; }
+  .cer-stripe { height: 4px; }
+  .cs-1 { background: var(--blue); }
+  .cs-2 { background: var(--green); }
+  .cs-3 { background: var(--amber); }
+  .cs-4 { background: #7b5ea7; }
+  .cer-body { padding: 9px 11px; background: var(--surface); }
+  .cer-name { font-size: 11px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+  .cer-info { font-size: 10px; color: var(--ink3); line-height: 1.5; }
+
+  /* ── KANBAN CARDS ── */
+  .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .kcard {
+    background: #fff; border: 0.5px solid var(--border2);
+    border-radius: 10px; overflow: hidden;
+  }
+  .kcard-stripe { height: 4px; }
+  .ks-feat { background: var(--blue); }
+  .ks-bug  { background: var(--red); }
+  .kcard-body { padding: 10px 12px; }
+  .kcard-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .kcard-id { font-size: 10px; color: var(--ink3); font-family: 'DM Mono', monospace; }
+  .kcard-tag { font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 3px; }
+  .kt-feat { background: var(--blue-pale); color: #0c447c; }
+  .kt-bug  { background: var(--red-pale);  color: #791f1f; }
+  .kcard-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 5px; line-height: 1.4; }
+  .kcard-desc { font-size: 10px; color: var(--ink2); line-height: 1.5; margin-bottom: 8px; }
+  .kcard-meta { display: flex; align-items: center; justify-content: space-between; }
+  .assignee { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--ink3); }
+  .avatar {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 600; flex-shrink: 0;
+  }
+  .av-b { background: var(--blue-pale); color: #0c447c; }
+  .av-g { background: var(--green-pale); color: #27500a; }
+  .av-a { background: var(--amber-pale); color: #633806; }
+  .kcard-pts { font-size: 10px; font-weight: 500; color: var(--ink3); background: var(--surface); padding: 2px 6px; border-radius: 3px; }
+  .kcard-footer {
+    display: flex; align-items: center; gap: 5px;
+    margin-top: 8px; padding-top: 7px; border-top: 0.5px solid var(--border);
+  }
+  .pri-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .pd-hi  { background: var(--red); }
+  .pd-med { background: var(--amber); }
+  .pri-lbl { font-size: 9px; color: var(--ink3); }
+  .due-lbl { font-size: 9px; color: var(--ink3); margin-left: auto; }
+  .bloq-bar {
+    display: flex; align-items: center; gap: 5px;
+    margin-top: 7px; padding: 5px 8px;
+    background: var(--amber-pale);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 4px 4px 0;
+  }
+  .bloq-icon {
+    width: 13px; height: 13px; border-radius: 50%; background: var(--amber);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    font-size: 9px; color: #fff; font-weight: 600;
+  }
+  .bloq-txt { font-size: 10px; color: #633806; }
+
+  /* ── CFD ── */
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 11px; color: var(--ink2); align-items: center; margin-bottom: 12px; }
+  .leg-item { display: flex; align-items: center; gap: 5px; }
+  .leg-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .cfd-wrap { position: relative; width: 100%; height: 260px; }
+  .cfd-note { font-size: 10px; color: var(--ink3); text-align: right; margin-top: 5px; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--surface2); border-top: 0.5px solid var(--border2);
+    padding: 12px 36px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-left { display: flex; align-items: center; gap: 8px; }
+  .footer-logo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+  .footer-txt { font-size: 10px; color: var(--ink3); }
+  .footer-right { font-size: 10px; color: var(--ink3); font-family: 'DM Mono', monospace; }
+
+  /* ── CARD TYPE LEGEND ── */
+  .card-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; font-size: 10px; color: var(--ink2); }
+  .cl-item { display: flex; align-items: center; gap: 5px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-logo">
+        <svg width="52" height="52" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="hbl" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1a6bbf"/>
+              <stop offset="100%" stop-color="#2e8de0"/>
+            </linearGradient>
+            <linearGradient id="hgl" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4db848"/>
+              <stop offset="100%" stop-color="#72d46d"/>
+            </linearGradient>
+          </defs>
+          <path d="M100 22 C50 22,14 62,14 110 C14 142,28 168,52 182 L72 144 C60 133,52 123,52 110 C52 82,74 56,100 56 C107 56,114 58,120 62 Z" fill="url(#hbl)"/>
+          <path d="M100 22 C150 22,186 62,186 110 C186 136,176 158,160 172 L140 134 C150 124,150 118,150 110 C150 82,128 56,100 56 L100 22 Z" fill="url(#hgl)"/>
+          <polygon points="158,176 132,152 184,152" fill="url(#hgl)"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <div class="title">Kanban Cheatsheet</div>
+        <div class="sub">Ad Hoc Agile Consulting · Referência rápida</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <div class="header-badge">
+        <div class="badge-val">4</div>
+        <div class="badge-lbl">Princípios</div>
+      </div>
+      <div class="header-badge">
+        <div class="badge-val">CFD</div>
+        <div class="badge-lbl">Incluído</div>
+      </div>
+      <div class="header-badge">
+        <div class="badge-val">3</div>
+        <div class="badge-lbl">Métricas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- BOARD -->
+    <div class="section-label">Board Kanban</div>
+    <div class="board">
+      <div class="col col-backlog">
+        <div class="col-head">Backlog</div>
+        <div class="col-body">
+          <div class="mini-card"><span class="mini-tag mt-feat">feature</span><br>Login SSO</div>
+          <div class="mini-card"><span class="mini-tag mt-bug">bug</span><br>Timeout error</div>
+        </div>
+      </div>
+      <div class="col col-todo">
+        <div class="col-head">A fazer</div>
+        <div class="col-body">
+          <div class="mini-card"><span class="mini-tag mt-chore">chore</span><br>Refatorar auth</div>
+        </div>
+      </div>
+      <div class="col col-doing">
+        <div class="col-head">Em andamento <span class="wip-pill">WIP 2</span></div>
+        <div class="col-body">
+          <div class="mini-card"><span class="mini-tag mt-feat">feature</span><br>Dashboard v2</div>
+          <div class="mini-card"><span class="mini-tag mt-bug">bug</span><br>Cache inválido</div>
+        </div>
+      </div>
+      <div class="col col-done">
+        <div class="col-head">Concluído</div>
+        <div class="col-body">
+          <div class="mini-card"><span class="mini-tag mt-feat">feature</span><br>Exportar CSV</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- FLOW + WIP -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:0">
+      <div>
+        <div class="section-label">Fluxo do item</div>
+        <div class="flow">
+          <div class="flow-step fs-1">Backlog</div>
+          <div class="flow-arrow">›</div>
+          <div class="flow-step fs-2">A fazer</div>
+          <div class="flow-arrow">›</div>
+          <div class="flow-step fs-3">Fazendo</div>
+          <div class="flow-arrow">›</div>
+          <div class="flow-step fs-4">Feito</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Limites WIP</div>
+        <div class="wip-row">
+          <div class="wip-tag">A fazer <span>máx 3</span></div>
+          <div class="wip-tag">Fazendo <span>máx 2</span></div>
+          <div class="wip-tag">Revisão <span>máx 2</span></div>
+          <div class="wip-tag">Bloqueado <span>sinalizar</span></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- PRINCIPLES + PRACTICES -->
+    <div class="grid2">
+      <div class="box">
+        <div class="box-title"><span class="dot dot-blue"></span>4 Princípios Kanban</div>
+        <div class="rule">Visualize o trabalho</div>
+        <div class="rule">Limite o WIP</div>
+        <div class="rule">Gerencie o fluxo</div>
+        <div class="rule">Melhoria contínua</div>
+      </div>
+      <div class="box">
+        <div class="box-title"><span class="dot dot-green"></span>6 Práticas Essenciais</div>
+        <div class="rule">Board visível para o time</div>
+        <div class="rule">Políticas explícitas e claras</div>
+        <div class="rule">Feedback loops regulares</div>
+        <div class="rule">Colaborar e evoluir sempre</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- METRICS + CEREMONIES -->
+    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:20px">
+      <div>
+        <div class="section-label">Métricas chave</div>
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-val">CT</div>
+            <div class="metric-lbl">Cycle Time — do início ao fim</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val">LT</div>
+            <div class="metric-lbl">Lead Time — pedido à entrega</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val">TP</div>
+            <div class="metric-lbl">Throughput — itens por período</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Cerimônias</div>
+        <div class="ceremonies">
+          <div class="cer"><div class="cer-stripe cs-1"></div><div class="cer-body"><div class="cer-name">Daily Standup</div><div class="cer-info">15 min · diário<br>Bloqueios e fluxo</div></div></div>
+          <div class="cer"><div class="cer-stripe cs-2"></div><div class="cer-body"><div class="cer-name">Replenishment</div><div class="cer-info">Semanal<br>Priorizar backlog</div></div></div>
+          <div class="cer"><div class="cer-stripe cs-3"></div><div class="cer-body"><div class="cer-name">Review</div><div class="cer-info">Quinzenal<br>Validar entregas</div></div></div>
+          <div class="cer"><div class="cer-stripe cs-4"></div><div class="cer-body"><div class="cer-name">Retrospectiva</div><div class="cer-info">Mensal<br>Melhoria do fluxo</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- KANBAN CARDS -->
+    <div class="section-label">Cards — anatomia</div>
+    <div class="cards-grid">
+      <div class="kcard">
+        <div class="kcard-stripe ks-feat"></div>
+        <div class="kcard-body">
+          <div class="kcard-top"><span class="kcard-id">AHAC-042</span><span class="kcard-tag kt-feat">feature</span></div>
+          <div class="kcard-title">Dashboard de métricas</div>
+          <div class="kcard-desc">Visualizar CT, LT e throughput em tempo real com filtros por período.</div>
+          <div class="kcard-meta">
+            <div class="assignee"><div class="avatar av-b">RM</div><span>Rafael M.</span></div>
+            <span class="kcard-pts">5 pts</span>
+          </div>
+          <div class="kcard-footer">
+            <div class="pri-dot pd-hi"></div>
+            <span class="pri-lbl">Alta prioridade</span>
+            <span class="due-lbl">Vence 25/04</span>
+          </div>
+        </div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-stripe ks-bug"></div>
+        <div class="kcard-body">
+          <div class="kcard-top"><span class="kcard-id">AHAC-038</span><span class="kcard-tag kt-bug">bug</span></div>
+          <div class="kcard-title">Notificações duplicadas no Slack</div>
+          <div class="kcard-desc">Usuário recebe dois alertas ao mover card para "Concluído".</div>
+          <div class="kcard-meta">
+            <div class="assignee"><div class="avatar av-g">LF</div><span>Luiza F.</span></div>
+            <span class="kcard-pts">2 pts</span>
+          </div>
+          <div class="kcard-footer">
+            <div class="pri-dot pd-hi"></div>
+            <span class="pri-lbl">Alta prioridade</span>
+            <span class="due-lbl">Vence 22/04</span>
+          </div>
+          <div class="bloq-bar">
+            <div class="bloq-icon">!</div>
+            <span class="bloq-txt">Bloqueado — aguardando acesso ao webhook</span>
+          </div>
+        </div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-stripe ks-feat"></div>
+        <div class="kcard-body">
+          <div class="kcard-top"><span class="kcard-id">AHAC-051</span><span class="kcard-tag kt-feat">feature</span></div>
+          <div class="kcard-title">Exportar CFD em PDF</div>
+          <div class="kcard-desc">Gerar relatório do Cumulative Flow Diagram com um clique para o cliente.</div>
+          <div class="kcard-meta">
+            <div class="assignee"><div class="avatar av-a">CS</div><span>Carlos S.</span></div>
+            <span class="kcard-pts">3 pts</span>
+          </div>
+          <div class="kcard-footer">
+            <div class="pri-dot pd-med"></div>
+            <span class="pri-lbl">Média prioridade</span>
+            <span class="due-lbl">Vence 30/04</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-legend">
+      <div class="cl-item"><div class="leg-sq" style="background:var(--blue)"></div> Feature</div>
+      <div class="cl-item"><div class="leg-sq" style="background:var(--red)"></div> Bug</div>
+      <div class="cl-item"><div class="pri-dot pd-hi" style="width:8px;height:8px"></div> Alta prioridade</div>
+      <div class="cl-item"><div class="pri-dot pd-med" style="width:8px;height:8px"></div> Média prioridade</div>
+      <div class="cl-item"><div class="leg-sq" style="background:var(--amber);border-radius:0"></div> Bloqueado</div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- CFD -->
+    <div class="section-label">Cumulative Flow Diagram (CFD)</div>
+    <div class="legend">
+      <div class="leg-item"><div class="leg-sq" style="background:#2e7d32"></div> Concluído</div>
+      <div class="leg-item"><div class="leg-sq" style="background:#2d7d9a"></div> Em andamento</div>
+      <div class="leg-item"><div class="leg-sq" style="background:#1a6bbf"></div> A fazer</div>
+      <div class="leg-item"><div class="leg-sq" style="background:#4a5568"></div> Backlog</div>
+    </div>
+    <div class="cfd-wrap">
+      <canvas id="cfdChart" role="img" aria-label="CFD de 8 semanas mostrando acúmulo de itens por coluna">Dados de fluxo acumulado por semana.</canvas>
+    </div>
+    <div class="cfd-note">Lead Time ≈ distância horizontal entre entrada no backlog e saída em concluído · WIP ≈ largura vertical das bandas do meio</div>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">
+      <div class="footer-logo-dot"></div>
+      <span class="footer-txt">Ad Hoc Agile Consulting · Fluxo contínuo, entrega constante</span>
+    </div>
+    <div class="footer-right">adhocagile.com</div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+const labels = ['Sem 1','Sem 2','Sem 3','Sem 4','Sem 5','Sem 6','Sem 7','Sem 8'];
+const done   = [2,  5,  8, 12, 16, 21, 26, 32];
+const doing  = [4,  5,  6,  5,  6,  5,  4,  4];
+const todo   = [10, 11, 12, 13, 14, 13, 12, 11];
+const backlog= [18, 20, 22, 21, 23, 22, 20, 19];
+
+new Chart(document.getElementById('cfdChart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Concluído',
+        data: done,
+        backgroundColor: 'rgba(46,125,50,0.72)',
+        borderColor: '#2e7d32',
+        borderWidth: 1.5,
+        fill: 'origin',
+        tension: 0.4,
+        pointRadius: 3,
+        pointBackgroundColor: '#2e7d32'
+      },
+      {
+        label: 'Em andamento',
+        data: doing.map((v,i) => v + done[i]),
+        backgroundColor: 'rgba(45,125,154,0.65)',
+        borderColor: '#2d7d9a',
+        borderWidth: 1.5,
+        fill: '-1',
+        tension: 0.4,
+        pointRadius: 3,
+        pointBackgroundColor: '#2d7d9a',
+        borderDash: [4,3]
+      },
+      {
+        label: 'A fazer',
+        data: todo.map((v,i) => v + doing[i] + done[i]),
+        backgroundColor: 'rgba(26,107,191,0.55)',
+        borderColor: '#1a6bbf',
+        borderWidth: 1.5,
+        fill: '-1',
+        tension: 0.4,
+        pointRadius: 3,
+        pointBackgroundColor: '#1a6bbf',
+        borderDash: [6,3]
+      },
+      {
+        label: 'Backlog',
+        data: backlog.map((v,i) => v + todo[i] + doing[i] + done[i]),
+        backgroundColor: 'rgba(74,85,104,0.38)',
+        borderColor: '#4a5568',
+        borderWidth: 1.5,
+        fill: '-1',
+        tension: 0.4,
+        pointRadius: 3,
+        pointBackgroundColor: '#4a5568',
+        borderDash: [2,3]
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const vals = [done, doing, todo, backlog];
+            const names = ['Concluído','Em andamento','A fazer','Backlog'];
+            return names[ctx.datasetIndex] + ': ' + vals[ctx.datasetIndex][ctx.dataIndex] + ' itens';
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(30,42,56,0.07)' },
+        ticks: { font: { size: 11, family: "'DM Sans', sans-serif" }, color: '#6b7d90' }
+      },
+      y: {
+        grid: { color: 'rgba(30,42,56,0.07)' },
+        ticks: { font: { size: 11, family: "'DM Sans', sans-serif" }, color: '#6b7d90', stepSize: 10 },
+        title: { display: true, text: 'Itens acumulados', font: { size: 11 }, color: '#6b7d90' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

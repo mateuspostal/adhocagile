@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Thinking Cheatsheet — Ad Hoc Agile Consulting</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue:        #1a6bbf;
+    --blue-light:  #2e8de0;
+    --blue-pale:   #e6f1fb;
+    --green:       #4db848;
+    --green-dark:  #2e7d32;
+    --green-pale:  #eaf3de;
+    --dark:        #1e2a38;
+    --teal:        #2d7d9a;
+    --teal-pale:   #e0f4f8;
+    --amber:       #e08020;
+    --amber-pale:  #faeeda;
+    --orange:      #d4550a;
+    --orange-pale: #fdebd8;
+    --red:         #c0392b;
+    --red-pale:    #fcebeb;
+    --purple:      #6b3fa0;
+    --purple-pale: #f3eeff;
+    --pink:        #b5338a;
+    --pink-pale:   #fce8f6;
+    --ink:         #1c2430;
+    --ink2:        #3d4f63;
+    --ink3:        #6b7d90;
+    --surface:     #f4f7fa;
+    --surface2:    #edf1f6;
+    --border:      rgba(30,42,56,0.10);
+    --border2:     rgba(30,42,56,0.18);
+
+    /* fase colors */
+    --f1: #6b3fa0;  /* Empathize  — roxo */
+    --f2: #1a6bbf;  /* Definir  — azul */
+    --f3: #d4550a;  /* Idear    — laranja */
+    --f4: #2d7d9a;  /* Prototipar — teal */
+    --f5: #2e7d32;  /* Testar   — verde */
+  }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { margin: 0; box-shadow: none; border-radius: 0; }
+  }
+  body {
+    background: #dce4ed;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    padding: 32px 20px;
+    min-height: 100vh;
+  }
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 48px rgba(30,42,56,0.18);
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--dark);
+    padding: 26px 36px 22px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-text .title { font-size: 22px; font-weight: 600; color: #fff; letter-spacing: -0.3px; line-height: 1.2; }
+  .header-text .sub   { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; letter-spacing: 0.04em; }
+  .header-badges { display: flex; gap: 8px; }
+  .hbadge {
+    background: rgba(255,255,255,0.08); border: 0.5px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 7px 13px; text-align: center;
+  }
+  .hbadge-val { font-size: 16px; font-weight: 600; color: #4db848; }
+  .hbadge-lbl { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; white-space: nowrap; }
+
+  /* BODY */
+  .body { padding: 26px 36px 36px; }
+  .section-label {
+    font-size: 10px; font-weight: 600; color: var(--ink3);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;
+  }
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 20px 0; }
+
+  /* ── PROCESSO VISUAL (arco de fases) ── */
+  .process-flow { display: flex; align-items: stretch; gap: 4px; margin-bottom: 0; }
+  .phase {
+    flex: 1; border-radius: 10px; overflow: hidden;
+    border: 0.5px solid var(--border2); display: flex; flex-direction: column;
+  }
+  .phase-head { padding: 10px 11px 9px; color: #fff; }
+  .phase-num  { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); margin-bottom: 3px; }
+  .phase-name { font-size: 13px; font-weight: 700; line-height: 1.2; }
+  .phase-en   { font-size: 10px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+  .ph1 { background: var(--f1); }
+  .ph2 { background: var(--f2); }
+  .ph3 { background: var(--f3); }
+  .ph4 { background: var(--f4); }
+  .ph5 { background: var(--f5); }
+  .phase-body {
+    background: var(--surface); padding: 9px 11px; flex: 1;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .phase-goal { font-size: 10px; font-weight: 600; color: var(--ink); margin-bottom: 3px; line-height: 1.4; }
+  .phase-item {
+    font-size: 10px; color: var(--ink2); padding-left: 12px;
+    position: relative; line-height: 1.4; margin-bottom: 2px;
+  }
+  .phase-item::before { content: "·"; position: absolute; left: 2px; font-weight: 700; }
+  .pi1::before { color: var(--f1); }
+  .pi2::before { color: var(--f2); }
+  .pi3::before { color: var(--f3); }
+  .pi4::before { color: var(--f4); }
+  .pi5::before { color: var(--f5); }
+  .phase-out {
+    margin-top: 6px; padding: 5px 7px;
+    border-radius: 5px; font-size: 9px; font-weight: 600; color: #fff;
+    text-align: center;
+  }
+  .po1 { background: var(--f1); }
+  .po2 { background: var(--f2); }
+  .po3 { background: var(--f3); }
+  .po4 { background: var(--f4); }
+  .po5 { background: var(--f5); }
+  .phase-arrow {
+    display: flex; align-items: center; font-size: 16px;
+    color: var(--ink3); flex-shrink: 0; align-self: center;
+  }
+
+  /* ── MINDSET ── */
+  .mindset-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .mindset-card {
+    border-radius: 10px; border: 0.5px solid var(--border2); overflow: hidden;
+  }
+  .mc-stripe { height: 4px; }
+  .ms1 { background: var(--f1); }
+  .ms2 { background: var(--f2); }
+  .ms3 { background: var(--f3); }
+  .ms4 { background: var(--green-dark); }
+  .mc-body { padding: 10px 12px; background: var(--surface); }
+  .mc-icon { font-size: 18px; margin-bottom: 5px; }
+  .mc-name { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .mc-desc { font-size: 10px; color: var(--ink2); line-height: 1.5; }
+
+  /* ── EMPATIA — ferramentas ── */
+  .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tool-card {
+    border-radius: 10px; border: 0.5px solid var(--border2); overflow: hidden;
+  }
+  .tc-head { padding: 8px 12px; color: #fff; }
+  .tc-name { font-size: 12px; font-weight: 700; }
+  .tc-tag  { font-size: 9px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+  .tc-body { padding: 9px 12px; background: var(--surface); }
+  .tc-desc { font-size: 11px; color: var(--ink2); line-height: 1.5; margin-bottom: 5px; }
+  .tc-tip  { font-size: 10px; color: var(--ink3); font-style: italic; }
+
+  /* ── HMW / POV ── */
+  .statement-block {
+    border-radius: 10px; border: 0.5px solid var(--border2); overflow: hidden; margin-bottom: 8px;
+  }
+  .sb-head { padding: 9px 14px; color: #fff; display: flex; align-items: center; gap: 10px; }
+  .sb-badge {
+    font-size: 11px; font-weight: 700; background: rgba(255,255,255,0.2);
+    padding: 3px 9px; border-radius: 5px; white-space: nowrap; font-family: 'DM Mono', monospace;
+  }
+  .sb-title { font-size: 13px; font-weight: 600; }
+  .sbh-pov { background: var(--f2); }
+  .sbh-hmw { background: var(--f3); }
+  .sb-body { padding: 10px 14px; background: var(--surface); }
+  .sb-formula {
+    background: #fff; border: 0.5px solid var(--border2); border-radius: 7px;
+    padding: 9px 13px; font-size: 12px; color: var(--ink); margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .sb-var { font-weight: 700; }
+  .pov-var { color: var(--f2); }
+  .hmw-var { color: var(--f3); }
+  .sb-example { font-size: 11px; color: var(--ink2); line-height: 1.5; }
+  .sb-ex-label { font-size: 9px; font-weight: 700; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+
+  /* ── MAPA DE EMPATIA ── */
+  .empathy-map {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 5px;
+  }
+  .em-center {
+    grid-column: 1 / 3; background: var(--dark); color: #fff;
+    border-radius: 8px; padding: 9px 14px; text-align: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .em-cell {
+    border-radius: 8px; border: 0.5px solid var(--border2); padding: 9px 12px;
+    background: var(--surface);
+  }
+  .em-label {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 5px;
+  }
+  .em-items { display: flex; flex-direction: column; gap: 3px; }
+  .em-item { font-size: 10px; color: var(--ink2); padding-left: 12px; position: relative; line-height: 1.4; }
+  .em-item::before { content: "·"; position: absolute; left: 2px; font-weight: 700; color: var(--ink3); }
+  .em-pain-gain {
+    grid-column: 1 / 3; display: grid; grid-template-columns: 1fr 1fr; gap: 5px;
+  }
+  .eg-pain { background: var(--red-pale);   border-color: #f09595 !important; }
+  .eg-gain { background: var(--green-pale);  border-color: #a3d9a5 !important; }
+  .egl-pain { color: var(--red); }
+  .egl-gain { color: var(--green-dark); }
+
+  /* ── IDEAÇÃO — técnicas ── */
+  .ideation-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .idea-card {
+    border-radius: 10px; border: 0.5px solid var(--border2); overflow: hidden;
+  }
+  .idea-head { padding: 8px 11px; background: var(--f3); color: #fff; }
+  .idea-num  { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.6); margin-bottom: 2px; }
+  .idea-name { font-size: 12px; font-weight: 700; }
+  .idea-body { padding: 9px 11px; background: var(--surface); }
+  .idea-desc { font-size: 11px; color: var(--ink2); line-height: 1.5; margin-bottom: 4px; }
+  .idea-rule { font-size: 10px; color: var(--ink3); font-style: italic; }
+
+  /* ── PROTOTIPAGEM ── */
+  .proto-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .proto-card {
+    border-radius: 10px; border: 0.5px solid var(--border2); overflow: hidden;
+  }
+  .proto-head { padding: 8px 10px; background: var(--f4); color: #fff; }
+  .proto-fid  { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.6); margin-bottom: 2px; }
+  .proto-name { font-size: 11px; font-weight: 700; }
+  .proto-body { padding: 8px 10px; background: var(--surface); }
+  .proto-desc { font-size: 10px; color: var(--ink2); line-height: 1.5; margin-bottom: 4px; }
+  .proto-when { font-size: 10px; font-weight: 600; color: var(--teal); }
+
+  /* ── TESTE — protocolo ── */
+  .test-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .ts-card {
+    border-radius: 8px; overflow: hidden; border: 0.5px solid var(--border2);
+    display: flex; flex-direction: column;
+  }
+  .ts-head {
+    padding: 7px 9px; background: var(--f5); color: #fff;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.05em;
+  }
+  .ts-body { padding: 8px 9px; background: var(--surface); flex: 1; }
+  .ts-text  { font-size: 10px; color: var(--ink2); line-height: 1.5; }
+
+  /* ── DIVERGE / CONVERGE ── */
+  .dc-wrap {
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center;
+  }
+  .dc-box { border-radius: 10px; border: 0.5px solid var(--border2); overflow: hidden; }
+  .dc-head { padding: 9px 14px; color: #fff; text-align: center; }
+  .dc-title { font-size: 13px; font-weight: 700; }
+  .dc-sub   { font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+  .dch-div { background: var(--f3); }
+  .dch-con { background: var(--f2); }
+  .dc-body { background: var(--surface); padding: 10px 14px; }
+  .dc-item { font-size: 11px; color: var(--ink2); margin-bottom: 4px; padding-left: 14px; position: relative; line-height: 1.5; }
+  .dc-item::before { content: "→"; position: absolute; left: 0; color: var(--ink3); }
+  .dc-middle { text-align: center; }
+  .dc-middle-icon { font-size: 28px; }
+  .dc-middle-lbl  { font-size: 10px; color: var(--ink3); margin-top: 4px; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--surface2); border-top: 0.5px solid var(--border2);
+    padding: 12px 36px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-left { display: flex; align-items: center; gap: 8px; }
+  .footer-logo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+  .footer-txt   { font-size: 10px; color: var(--ink3); }
+  .footer-right { font-size: 10px; color: var(--ink3); font-family: 'DM Mono', monospace; }
+
+  /* util */
+  .rule { font-size: 11px; color: var(--ink2); margin-bottom: 4px; padding-left: 14px; position: relative; line-height: 1.5; }
+  .rule::before { content: "→"; position: absolute; left: 0; color: var(--blue); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAIqAiYDASIAAhEBAxEB/8QAHQABAAIDAQEBAQAAAAAAAAAAAAYHAwQFAgEICf/EAEkQAAIBAwIDAgoFCQYFBQEAAAABAgMEEQUhBhIxQVEHExQiYXGBkbHRMkKSocEIFSM0NVJyc/AzU2KCsuEkQ1STohYmRGPxNv/EABsBAQACAwEBAAAAAAAAAAAAAAADBAECBQYH/8QANhEBAAIBAgQDBgUEAgIDAAAAAAECAwQRBRIhMUFRYQYTIjJxgZGhwdHhFEKx8CMzFRYkYvH/2gAMAwEAAhEDEQA/APxkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHT0TQdY1qsqWl6dcXL7ZQg+Vet9EYmYrG8tbWrWN7TtDmAtPQPAzq9xJT1e8o2lPbzKeZTfyJzpPgp4UseTx1vWvKkfrVpbP1pbFHLxLT4/Hf6Obm4vpsfSJ3+j86RjKTxFNt9yNyhpGq13ihpt5Vf+ChJ/gfqvT9B0mxgqdpplrRiuyNJHSp0YwS5YRivQkjnZOOxHy0/NRtx+P7afm/J0eFOJJJNaHf799Fpn2pwpxLCPNLQtQx6KEn8D9cQyklzS95mim+1lW3tFkj+yPxa147kn+yH43r6HrVvHmr6Tf0o987eSXwNGUJQbUouLXVNYP214qElicIyXpSZhvNE0q+ioXmm2tePdOkma19p4j5sf5/wsU4xv81PzfikH6y1bwTcEanGTekq1qS6TtpOGPYtvuIPxB+T7+jdTQdak574pXUNn/mj09zLuH2k0WSdrTNfr/C9j4jhv36KFBJOK+BuKOGG5avpNanRTwq8Fz03/mXTPpwRs7eLLTLXmxzEx6LtbRaN4kABIyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbWn6dfahU8XZ2tWtL/AArZetm1a2vO1Y3lra1axvadoaoJxpPg31a5ip3lelaxf1cc0iUaf4MtFpxi7q4ua8u1Z5V9x1sHAtbm68m316fy4+o9oNBg6TfefTr/AAqKlPxdSM1GMnF5xJZT9aJjpfhO4r023hb2le1p0IbKmreKX3FhUPB/wtBYVhKXplVbNmPAnCrWHpcftssX9k9Rkja/LP8Av0cnN7UcOyfPjmftH7oXa+GbianUUri3sriP7vK4/Bkj0vw22lSaWpaRUo+mjPmS9+5u1/B1wpWW1jUpvvhVl8MnLvvBLpFTe0v7mjLsUsOPzKGf2LybfJE/Sdv2V44zwXN0tWa/b9plPuHuP+Fda5I2+qUqNaX/ACq/mS+8lUJQqR5qc4zj3xeUfnHWPBTrtpB1LKvQvYpZxHMZe7/8OPQ1DjXhStGar6haRi1tKTlTeOztR5fX+yubD161+sdPxhZx6PR6rrpc0T6T3/f8n6rXX0memtvSUhwl4a4vko8SWbT6ePt1t7Ylw6FrGma1aQutNvKVxCSyuV7nktboc+m/7K9PPwQZdJl08/HDrQWUZ4r3mGljHU2I9Ti5J6tqQy047GeKPFNbGeK9BQyW6rVIeJ0KdaDp1acZxksOMllMrXj/AMCfD3EUKlzpMI6RqD35qUc0pP0x/FFpQjvsZ6aXcZ0/EM+kvz4bbT/vgt4rWpO9Zfh3jjgbiPg668VrFjKNGUsU7in51KfqfZ6ngjJ/QTU9OstVsqtjqFrTuberHlnTqRymj83eGHwG3Wk+N1nhClUubFLmq2e8qlL0x/eXo6+s93wf2sxaqYxan4befhP7S6uHUc3SyjAfWmm00011TPh7FaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2LCzub65jb2lGdWpJ7KKNzhzRLzW71ULaOIJ+fUfSKLf4b0Kx0O1VK2hzVH9Oq/pSO1wrguXXTzT0p5+f0cfinGMehryx1v5fui/Dng8pU+WtrNR1JdfEweEvW+0n+n2lrZUY0rS3p0YRWEoRwfVuZE9j3uk4fp9HXbFXb18fxeA13ENRrJ3y26eXh+DNEyZ3MMXse8lpy5hnizLB9hqxkjLGRhFaraizLF95qxlsZYzMoLVbMdzxdW1vdUnTuaUKsX1U1k8+MUIc02oxXVvZI4+q8W8P6bnyvVKCf7kJc0vcivmyYaR/wAloiPVtg0+fJb/AIqzM+kOFxN4MNG1KlKpprVhc9U4rMH60Vjf6dxRwRqKuKVW4tUp4hXpS8yfr+TLE1HwtaLQzGys7m5x0b81M4OseFWN/Zztp6HRqwmmmqryjxnFMXCc0TyXiJ9ImYn/AH0e94RbjeLaubHzU/8AtMb/AJ/qlXAXhro1ZU7Piij4qbairqkvN/zLsLs0q/s9RtYXNjc07ijJZjOEspn4j1CtQuLmVWhbRtoy3dOMspP0eg7PBfGOucKX0bjTLuapc2alvJ5pzXq7PWfMuI+zeLNvbTzyz5eE/s9Fm4bW0c2PpPk/a1LGFgzpbkE8F3hB0njOwXipxt9RgsVbWUvOXpXeidx6nzzV6fJp8k48kbTDn8tqTy2jqzU0Z4LYwQ9RsQObkWKM9NGRxy+h4h6jNFlS09VmsKH8PfgYo6pSuuKOFrd09QjF1Lm0px82vjrKKS+m/v8AWfl6ScZOMk008NPsP6PQ3R+avyofBdTtfG8baDb8tOcs6hQhHaLf/NXtxn157z3/ALKe0tpvGi1U9/ln9J/T8F3Ffwl+dQAfSFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOlw7o9zrN/G2opqK3qT7Io0rWhUubmnb0Y81SpJRivSXFwvo1DRdOhRhFOvJJ1Z97Ozwbhc6/L8XyR3/ZyuLcRjRYvh+ae37t3RdNtdJsYWtrDlSXnPtk+9nSgzAjLBn0mlK46xSkbRD51mvbJabWneZZcntMw5PedjKvMMuT1ze8wSqQgszko+swzvYfUTk/TsjSZiO7EY5t2hvpntVElu0vaciV1Vlsmo+o52r6xaaXbSr3dbdLMY53k+5EGXUUx1m1p2iEtNHfLaK16yk1W+oUKTq1KkYU49ZSeEiDcTeE2jbOdto1JV6i28dP6K9XeV/xJxJf63WfjZunbp+ZSi9kvT3nFPHcQ9pMmTemn6R5+P8AD2HDvZbDj2vqfiny8P5djWeJtc1eX/G6jWlDshGXLFexHHAPNZMl8lua87y9VjxUxV5aRER6AANEgAANnS7+80y/pX1hcVLe5oy5oVIPDTP1V4FvCdb8Y2a0/UHChrNGK54rZVkvrR/FH5MNvSNQvNK1KhqFhXlQuaE1OE4vGGjk8W4Ti4ji5bdLR2n/AHwV8+CuWvq/e8XubNOWSCeCnja2404ap3sOWneUvMuaKe8ZLt9TJrTmfI9VpcmDJOPJG0w48b0naW7CXoMynuaUJ+gyxmc+2NYrdu05ni+oW99aVrO7owrW9aDp1Kc1lSi1hpmKE9j2qnYQcs1neE0Xfh7w08EVeBuNbjT4pysK+a1lPHWm39H1x6e7vIQfsv8AKQ4QXFXANa5tqXNqOl5uKGFvKP14e1b470j8aH2r2b4pPEdFFrz8dek/v9/87r2K/PUAB30gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABt6RZz1DUaNpD/mSw33LtNqUm9orXvLW1orE2ntCZ+DPRcKWrXEeu1FP72T3OX6TWsqNO2tqdvTSjGnFRSM/Nv1Pq3DtFXR6euKv3+r5xxDVW1eeck9vD6Mie5lgzVnVjBZby+5GKdepNY+iu5Fq0xCj7ubN2rcU6fWWX3I16l3UkvNxFGsfSKbTLeMVYe3Jt5k8vvZ9yeOw9LswRNtmvqd/Q06yndXEuWMEVHrmp19Vv53NaTw35keyK7jueELVpXV95DSkvE0t3jtZFDw3HeITny+5p8tfzl7XgnD4wY/e2j4rflAADgO6AAAAAAAAAACXeCfi+vwfxZb3ym/JKslTuodjg319h+yrG8oXdrSubepGpSqxU4ST2aayj8Dn6f/Jv4pnq3CUtKuZt19OkoRbe7g+nyPHe1fDYyY41NI6x0n6eDmcQx7R7yPuuOFR+4yqoc+NRGRVdz59bC51cjoQqbdcHpVPSaEanpMiqEE4U0ZG8pRnFwn9GSaa9DPwx4V9AfDXhA1fSlT5KMa7qUFjC8XLzo49SePYftyNTY/Of5Xek8uq6PrsIP9NSlb1ZdmYvMfjL3HqPZDUTg104p7Xj846x+q5pMnx7eahgAfUXSAD6008NYA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEz8GVjz3Va/nDKprlg2u3tIYSjS+J46RoUbKyo81xJuU6kuibOpwjJgw6mMueelev38FHiNMuTBOPFHWen2WLeXdtZ0nVuq0KUF2yeCH63xu6k/JtJp4cny+On+CIXqF/d39Z1bqvOpJvtey9SMmh01V1i0pvtqx+J1dX7R59TeMWCOWJnbfx/hzdNwPDgj3mX4pj8Fu20ZKhT53mXKuZ+kzI8pYSXcj2llHtYjaIh5G87zu+M+4PrR9wa7NN3zGxrarcK106tcS6Qg2/cbiXoI54RKro8Ozim06kkl71n7slXWZfc4L5PKJT6TH77PSnnKsK9SVavOtN5lOTk/WzwAfLpned5fSYjboAAwyAAAAAAAAAAAWR+Tvq0tO4+hbOTULyk6bXe1uvxK3O3wJdOz4y0m5TacLqG6eOrx+JW1mKM2C9J8YlDqac+K1fR+z41H25yZVVOdCq5JS33WTPGofLL4XkaZW8qhlVVYyzi6lrGnaXbTutRvaNrSgsylUmkVJxv4drOgqlrwxaO4q4aVzW2gn3pdWb6bhWfV22xV39fBdwUyZp2pC8L3U7HT7eVxfXdG2pQWZTqTUUkfnv8oLwkcN8T6RT0LSFUvJ0a6qq6SxTi0mnjO7zn1FVcTcVa/xJX8ZrGpV7lZzGnnEI+qK2O1wH4MeLuMJwnp2mzo2Uut3cJwpY9D6y9h6nRcB03DJjVarJ1r9o/l2MGljF8V56oWS/gbwb8XcY1Y/mjS6it31ua+YUl7cb+zJ+jfB54BuFuH3Su9ZT1u+jvitHFGL9EO325LhtqdOlSVKlSjTpxWFGMcJFDintvjx700deafOe32jvP5J5zb/KpXgTwC8L8NWi1biep+drq3h42cZ7UKeFl+b9ZfxZ9R+YeMNR/O3FGpaioQhGvczlCMPoxjnZL0Ywfsv8ovXXoHgl1WdOSjXvIq0p74zzvEv/ABy/Yfh8ueyGbU62uTWam02mZ2jyiI6ztH+9m+PeesgAPZpQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA6fCyUuILNNZxUz7kcw3tAly61aSTxiqifSztnpM+cf5RZ43xWj0lcK3MkVsY6f0UZYn1mXzSz7y9p6wfUj0ka7Ipl5UdiI+FaL/M1r6K+X7iZJEc8JFs63DVScU26clL718mc7i1Jvo8kR5LvC8kV1mOZ81TAA+ZPpAAAAAAAAAAAAAAGzpnP+crXxeefx0OXHXOUaxkt6s6FenXpPlqU5KUX3NPKMT2YtG8bP2Be65pWl6dG61C+o0KcILLlNdxVvGPhuhFTtuG7RTluvKay2XpS7Sm9T1PU9YuVO9ua1zUbxGLeUvQl2E54H8D/FHELhXvKL0qze/jK8XzteiHX34PORwzR6KPe6m349vw8XEw8Mw6eObPbefy/lC9d1zWNfvHX1O9r3VST82Ley9CRLuCPBFxhxNOnUdk9Nspbu4uly7eiPVv3es/QHAngu4U4YVOtSsle3sVvc3C5nn0LovYWDB4SSWyORr/AGr93Hu9HTaPOf0j9/wT210RHLijaFecBeBbhHht07m7ovVr6OH4y4WYJ/4Y9F7cv0lp0IwhBQhFQhHZRSwkasGbFOWx4XXarPq78+a02n1RRkm07zLZT3M1NrBqRl3manNL6Twlu/Ucy1E9bPzd+WdxC6mo6PwxSk+WjTd3XXZzPMY/cpe8/OxMvDTr74k8Jmtakp81FXDo0cPK5IeamvQ8Z9pDT7jwLR/0fD8WLbrtvP1nrLo0jasAAOu2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADJa1HRuadVPDhNP7zGDMTtO8MTG8bLpsqirW1KrF7Tgmn7DdprYjXA955VoVLMszpeZIklvLfD7T6xps0Z8NckeMQ+bazFOLLanlLKlk9qJ9UTIok7nzZ8jExalZxvdNuLSS2qwcTZjEyxj3dTW1YtE1ntLSMk0tFo7w/PV5Qna3VW3qLE6cnFmInfhV0CVrerV6EP0FbCqYX0ZEEPlmu0ttLntit4f48H1LQ6qurwVy18f8+IACotgAAAAAAAABYXg38Gs+KaUby41ShQte2FKSlV9q7GRZs1MNOe87QizZ6YK8152hAbejWuK0KNClOrVm8RhCLbk+5JFl8FeBvXtXcLjWJfmu1e/LJZqyXq6L2+4uXhPg/h/hmmoaZYQVXGJXFRc1SXtfT1Ik1OZ5nW8evMbYI29ZcHPxm1p2xRt6uBwd4PuFuGJRqWOnxq3SW9xW8+fsz09hM6c1jc04S3M0ZHktTkyZrc2SZmfVQ97a872neW9TmZozNGE9zLGZzr401bt+M/SZqc1g58Z7GanU26lW+NYrdvKXcR3woa9/6d8H+s6rGp4urTtpRov/AOyXmx+9o7CqFJflba66PD2maBTm1K6rOvVSf1YLCT9GWn7C3wrQ/wBVrceKY6TPX6R1lbwTz3iH5rk222+r3PgB9odkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASnweah5PqE7OcsQrLzfWWRDOEUlb1Z0K8K1NuM4STTLc4e1KnqWmU7iLXNjEl3PtPbezWt58c6e3eOsfR5P2g0kxaM9e09Jd63qKfmy+l2ek2VA5il0aeGb9rcxm1Co8S7+xnqIt4PI5aTHWGeMTLGGyPqg+4yxhsjdTtdrajp9tqenVbG7gp0qqw0+x9jKN4u0C54f1SVtVTlSlvSqY2kvmX/CGxra1o9jrNjK0v6MZwf0ZNZcH3o4/F+E112PevS8dp/R1OD8atw/JtbrSe8frD83glXGHBOqaDVnVhTldWWfNq01nC/xdxFT55n0+TT3mmSNpfS9PqcWppGTFbeJAAQpwAAAAANrTdQvtNuFcWF3Wtqq6SpzcWapIuHODta1qpF0reVCg8N1aqwsd6XaOXm6bIc+fFhpNssxEeqZ8H+GDiCjcUbPU7RarGTUU4LlrP8ABsvXStSt722p1JKVtUksulVayvb0K04P4P0vh6kqkIK4vH9KvNZa9Ee5EnTzHd5ORreDYM0bxHLPp+z51xPjennL/wDGp08Z7b/SPBOY57tjKm+pDbPUbq1wqVVuK+rLdHXteIKUmlcUZQ75Q3XuPL6rgepxdaxzR6d/w/8A00/FMGTpM8s+v7u9GeDIp7mnbXFvdR57etGp3pdV7DK20+hxL4prbltG0unXJvG8dm0qnpMsKmxoc+Eeo1NiG2FNXI6EKq5kspH5J8P+v/n7wk3zhPmoWWLWnj/D9L/ybXsP0txPq8NH4e1DVKm6tredRLOMtLZe1n4uuq9W5uqtzWm51as3Ocn1bby2eo9ldFEZb558I2j793a4ZHNM38mIAHuHYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkHBes/mzUFSqyxb1XiWex95HwT6bUX0+WMtO8Is+GubHOO/aV3QnGUYzjLMWspmVNNEC4I4hxy6beS9FKb+BOUz6Totbj1mGMlPvHlLwGu0V9Lkmlvs6NreVaOIvz4dz6o6dvdUK2MT5Zfuy2ZwIy2MilnqW4vMORl09bdUmjHYyxWxGqVxWpbU6soruzlG5S1O5jhSjSn61g399XxUr6S8dpdqUFJOMoqSaw01lMiXEfg70LVnKtRhKxuHu5Uvot+lHbjq0vrWy9kjLHVYY3t6mfWitqMem1FeXLETDOnyavSW58MzE+kqj1fwYa9aZlZypXsezlfLL3EduuF+ILZtVtJuVjriOfgfoBapFrzbeefTJB6nVawqSXrlk85qOBaKZ3peY/N6LB7Va+kbZKRb8v8fs/OMtN1GP0rC6XrpS+R9p6VqdSSUNPum3/APUz9ETvKslhqCfeoo8c7b5njPfhZOXk4Pjr2vv9v5Xv/bcu3XFH4/wou14R4jucOlpVfD7ZYXxJFpXgy1CtKMr+7pUIdsYLmkWm5treTftPSlsQTocdfOVLP7U6y8bUiK/n/lH9B4I0HSpRqqh5TWj0qVt8ezoSiLSgoxSSXYtjApbHpy9JFOOK9Iee1Oozam3NltMz6s6lse1JY6mtk9KSKuWqrNGxzHrnNbmR95ipajTkbVOo4S54TcZLo08M6dtr19SwqjjcQXZNb+84kZMh/hB4zo6JbSs7OUal/NbLsprvZSzaTFn6ZKxK9w7DqsuaMenmd5/D7rHqeEDhilqsdMvL+FndySajP6P2uz2kloV6VWlGrRqQqQe6lCWUz8U3Netc3E7i4qSqVaj5pSk8ts7XDPF3EHDtVS0zUasKfbRm+am/Yzkan2cpaN8NtvSX0WeC2ikbX3t4+srw/KN1vyTgynptKa8ZfV1GazvyR85/fj3n5xJLx9xfe8X3ttdXdKNDxFLk5ISzFyzvL0Z29xGjrcL0c6TTxjnv3l1NDgnBhitu4ADorYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD7FuMlKLaaeU12E34T4qT5LLUZYa2hU/BkHBc0Wty6PJz45+seatqtJj1VOS8Ltp1IuKlF5T3TRlU/SVdoHFF5pzVOu3Xodze6J7pmrWeoU4ztq0ZN9Y53R7rQ8VwayPhna3k8ZruFZdNO+28ebrxl6TJGXeaame4zL1nJtRuxke4z2NJVMMyKoQWRWxt2Mtj2pbGpCoe+f0lO8opo2edd57UtjU59zJGZSytJo2ebY9KRrqXpPXNuUbo5q2FLYcyMKlsfW9yleGvKzJnqMl3mBMyLLXQqXq1mrLk+uajFyk0orq2cbXOINM0ei53dxBT7IJ7v2FXcU8c6lq6dC3btbfui/OkvS+wqW6Opw/gmo107xG1fOf080u454+p2UZ2GkyjVuMNSqp5UP9yqLitVuK061epKpUm8ylJ5bZjBHs+h8P4bg0GPkxR18Z8ZAAZdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMttXrW1VVKFWVOa7YsxAzEzE7wxMRPSUt0njKvSUad9T8bFbc8epKtO17Tb1LxVzFS/dk8Mqg+ptNNNpro0dnTcc1OHpb4o9f3crU8H0+brHwz6LnVZPeLTXoZkVQqOz1nUrTCpXU8Lsluda34y1CGPGUqc129h18fH9PePjiY/Nx83AMsfJMSsuNXJ78ZkglvxvRzita1IrvizbXGumrHmVX/lJf/I6W/WLw59+D6qs/ImaqGWE9iHR400n9+a/yv5GRcb6RBfSqP1RfyIMmq089rx+KvbhWq8McpgpmTnITLj3S8c0adZvuaNS48IdPH6Cym3/AIsFDJqsMf3MV4JrL/2LEjI+zqRhHM5KK72yprrj/V6sOWlTo0X34bOHf67q19tcX1WS7k+VfcUcmrp4Qu4fZjUXn/ktEfmtvWOK9H0xNVLmNSovqQeWQvXfCJfXMfFadT8mjn6ct216iDPd5YKV802d3Sez2k0+02jmn1/Zlubitc1pVrirKrUk8uUnlmIAidyIiI2gAAZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD3TpVamfF05zx15Y5PBPuDdOp09NVSrRhKU93zxTJMWOcltmmS/JG6D+S3P8A09X7DPM6NanHmnSnFd7i0Ws7S0f/AMW3/wC2jT1nT7evp1WnCjTg3Hqo4x/XUsW0kxG+6GNREz2ViD7OLhNxkmmnhpnwprIAAAAAAAAZVbXDWVQq/YZ5o/2sP4kWbYWttO0pylb0ZNrq4J5JsOH3m/VFkycitJW9eMXKVCokurcWYixuJKFvS0iq6dvRhLEt4wSf0ZFcmMuL3c7M4788bgAIkj7GLlJRim2+iRk8muP7ir9hmXSVGWp26lunURZjsrR7uzt/+2ixhwe8jfdDky8k7KsnSqwjzTpTiu9xaPBMOPKNKja0PFUoUk54fIsZIeR5acluVvjvz13AARtwyxt68oqUaNRp9GosxFj8O21CrpVCVShTm+SKzKKb6IlxYveTsjyX5I3V67e4X/Iq/YZiLTvLa2hZ1nG2oxapy3UEn0KtfUzmxe726sY8nO+AAhSgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADZ023d1fUqKWeaW+3YWlbUlQt4UorHKsdCF8B2XjLqV3NebDZE3f3nQ0tNq7qeotvbZ85483Llc3cetpLD6PZkM1LV3T4poyjLFOn5rWdnn/AGwTGm1OEZrpLdeonpki0zEeCK1JrtKuOKbPyTVqiSfLN83t7fn7Tkk448slUs4XUYvmh1/r1fAg5zc9OS8wu4rc1YAARJAA906dSrLlpwlOXdFZA8A34aRqM4pxt8prP0l8zHcabe0I81Sg8JZeGpY9eDblt5Mc0ebWpf2sP4kWrp2fIaP8JVdH+1h/Ei1dPf8AwND+At6PvKvqfBo8Ufser6pf6ZFallcU/smp6pf6WVqa6v5oZ0/ygAKiw3NEUXqtupvC58+3s+8tPsKt0RRlq1spPC58+3s+8tHPQ6Gj+WVTU94RbwhRk7O3aTaUm2+4hRNfCG35HbpNrM3khRX1P/ZKXB8gACumCzOGM/mej/DH4IrMszhj9j0P4V8EWtJ80q+o+WG5qH6jX/ly+BVD6lr6h+o1/wCXL4FUPqbazvDGm7S+AAprIDNRtriquanRnKPTKW3vNqnoupTWY26a/jj8zMVme0MTMQ54N6rpOoUvpW0m+6LUn9xp1ITpzcKkJQkuqksMTEx3ImJeQAYZAAAB9jGUpKMYuTfRJG1T02+qdLaov4ly/EzETPZjfZqA35aPqKWXb7fxx+Zr1rS6opyqUKkYr62NveJrMd4N4lgABhkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPqTbwlls+HQ4ftHeapSppbJpvYzWN52hiZ2jdOeFrTyTSKaa86W72NvVLhW1jVqyeMRfr/rqbEYqEIxWyisJEa48u1Ts4W0XvN7/1/XU6t593j+ijX47oZcVZVrmdZ7OUnL1Fi8K3nlmkU5SknOHmv0FbEo4DvPF3U7WUnyz3RR019r/VZzV3ql+o28bmwq0JLPNHp3/109pVt1SdC4qUnnzZYTx1XYy2ujIDxvZ+I1BVorEZ9y93y9hPq6bxzItPbrsjwB7oU5Vq0KUesngoLbo6DpFbU66STVJPd95PdP0qzsqcYU6MW1vlrO580SyhY6fTpRW7Scng2by4ha28q9R4jFZOnhw1x13nuo5Mk3naGVsxylQrPxcnTm+2LwyvdY1+9va0lGtKFLL5UttjnxvbuMlJXFRtd8s/E0tq436Q3jTzt3TTXOGaFzmtaYpVk84fR7nft6bpW9OnneMcMjXC3EDucWl3L9J9WWepKd0S4uS3xV8UV+aPhs5XFO2kVPVL/TIrUsnir9j1PVL/AEyK2Kmr+eFnT/KAAqp21pG2qW382PxLU7Cq9ISeqW2f7xFqL6Jf0fyyqanvCL+ECE6lpbqEZSxNt4WewhviK/8Ac1PsstipTp1I4nCMl3PcxOytc5VtR+wjbLp+e3NuxTNyRtsqzxFf+5qfZY8RX/uan2WWk7K17baj/wBtH3yG0fW1o/8AbRH/AEnq3/qfRVcqNWKblSmku1xZZPDKktHo5TXmr4I3FZWi/wDi0P8AtozKMYrEYqKXYlglw4PdzvujyZeeNtmHUP1Gv/Ll8CqH1LW1H9Qr/wAuXwKpkmpNNYaZDq+8JNN2l9pwlUmoQi5SbwkiYcP8L0+SNxf5b6qGDFwJpcKkpX1eKcU8QT7SZzeZZM6fBExzWYzZZieWGClbW1HajRhHCwnjL95llOKeHJe8inFPENSjVdrZySfbJEVnfXk3l3NX2SwSX1NaTtENK4JtG8ytXzZxxhSXp3Rz9S0eyvKfLUoxi0tml0/r0ECsNZv7Sspxryku1PtLA0bUKWpWar02s/WXcZplpl6TDFsdsfWED13Rq+m1ZP6VLOz7jlFrajaUr6znb1YxllbZ7GVlqVtK0vKlCSfmvbPcVc+H3c7x2WMWTnjae7WO1oGg19Skqk806Pe+01NCsHqF/GlvyLeTLMt6NO3oxpU0lGK95nBh5+s9jLk5ekd2np+jWFnDlhSUn256P5+3JvRjCKxCEYpdiWDQ1zVaGmW/PLeo15se8g2oa9qN3Ub8fOEM7RTLN8tMXSFeuO2TrKyYyXRNZ9Z5q0KVX+0pRl6cb+8qyN/exeVc1E/WdTTOJ9QtZJVajrQ7ebdmkaqs94bzp5jtLrcW6LYULfyqMvESedsdfn/uQw7XE+svVKlOMHinFZx6f6+JxSrlms2+FYxxMV6gAIm4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEz4BsuWlO8mt3tHYh9CnKrWhSj1k0kWjpNrC006jShHD5U3hdpa0tN7b+SDPbauzZe73IJxNZ6leanKatpygl5uPTv/ALewncsLd7B1Mbc+PaXMuOMkbTKtS80neFafmW/2/Rfc/kbGl6bqNtf06yoySUsN4fTvLC8Yv7z/AMhzpr+0/wDIijS1jruknPafApy5qcZdrRx+L7LyrS3KKzOHo9q+XtOynn0+3J5rU1VpSpvpJYLFqxaNpQ1nlndUh1uFKPjtZpJ4wuuTV1m2drqNWk48qzlLGOvZ+B0uCMfnhJ9xy8ddskRK/efgmYWB6tiMcf15Qs6dGLxzPzvU/wD8JMiI+EGL/Qy3xt+J0NRO2OVPDHxwiAAOUvs1lUlSu6U49VJFq0KnjaFOp+9FMqanl1IpdcotXT/1Gh/Ai7o57wramOzR4q/Y9ReiX+mRWxZPFX7IqeqX+llbGmr+aG2n+UABVTtrSf2nbfzY/EtR9Cq9J/adt/Nj8S1OxbF/R9pVNT3hw+MNRuNPs6crZqM5yxnuIz/6p1bGPGw+ydrwifqVt/H+BCSPUZLRfaJb4aVmu8w7b4o1Zyz42GO7l2EuKNXa2rQj6VE4gK/vb+abkr5OyuJtXxvcJvHVxJxoVxVutMpV6zzOUU2/YVcWXwz+xqH8K+CLWlvabTvKDPWIr0hu6h+oV/5cvgVRjLwWtqH6jX/ly+BVVNpVYt9OZGNX3g0/aVnaBRVDSqUEl03x7jPqdV0rCtNPD5ep801ryGljpgw8QwlPR7mEerg0W+1FfvZWVepKtWnVm8yk8s8AHIdEJJwHdSp6hK3y+Wa6f17CNnb4MUnrUWuyP4olwzteGmSN6ysN9SC8d0FC/jVSfnN59Hb8ck67SIeEKUc0Y/W2/H5ovamN8cqmCfjZOALdeT1LjGW5Y9RLF1wR7gOUXo+O1TefeSFLMkbYI2xwxlne8q44tu5XWrTTyow2S/r0YOOb2upx1Wsn1yvgjRObed7TMrtY2rAADRsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADt8HWflWqxlJZjTWehYj9CI9wNZK30915JqdTffsJBKSinKTwkstnU09OWn1Uc1uayMcdajOhRp21CcoSk/Oa+/8PeRHy68/wCpq/aNvie7d3q1R5yoeb7e35ew5ZRzZJteZWsddqw2PLrz/qav2h5bd/8AU1ftGuCLeW+0JHwhqleGoxoVqspwn+8+hO8dhU1rVlQuIVYvDi8lo6dcRurOnVi85is+sv6W+8TEquortO8Ivx7ZefC8gtvrf16/icLh2v5Pq9GbbWXgsDXbSF5pdWm8ZUcp939dfYVjJTo1mn5s4S9zRDqI5MnNCTDPNTaVtKXNFNdHujicZ2crrSuaEczpvP8AX3+8+8K6pC+s40pSxWh1R22lJNSSaa3T7S70y0+qt1pZUIJ1q/CtC5qSq2tRUpy3w/6+RzqfB9w54ncJLt2XzOfbT5InbZbjNSYcLRrWd3qFKnGLa5k2WjCCp04010jFI5uj6PZ6TSc04upjeo+xHSUozSlF5T7S5gxe7jr3VsuTnnp2czij9kVfVL/SytSyeKf2RU9Uv9Mititq/nT6f5QAFVO2tI/alt/Nj8S1OwqvSP2pa/zY/EtRp9zL+j+WVTU94RfwhJuyoYT2nkhJN+P0/IaW+N37d1sQgg1X/YlwfIAArpgsrhf9jUP4V8EVqWVwun+ZqH8K+CLWk+aUGo+Vu6h+o1/5cvgVQy19QX/A1/5cvgVS+rNtX3hrpu0rH4Suo3OkQw8yhs1n+u3J1a8FVoTpv6yx8iu+FtVenXqU3+ins8ssOjVp14KrSfNF9pPgyReuyLLSa23VbqtpOyvqlCSaSfmt9qNUszWtItdTp/pFy1F0kiLXHCd5Co1TnzR78f7lTJp7Vnp2WKZqzHVHCX8A2Mk53s4tLpHJ507hGXOp3dTzU944x+O/3EutqNOhRjSpJRjElwYLRbms0y5YmNoZHuyAccXUa+q+Lg01TXVe78M+0lev6rQ0+1nmf6VrCSe6K3r1JVq06s3mUnlmdVkjblhjT0/ulLPB/dJOpaye+comBVOm3dSyu4XFNvMXv6izNMvaOoW0a1KSk8bpG2myRNeVrnptPMh/HGnyp3vldOHmTXnYXT0/h7iNFtXNClcUpUq0FKL7yL3/AAfFycrWthfuv/f5kebT235qt8WaNtpQ0EiXCd658vNt34XzOjZcHwWHdVsvuT+XzIYwZJ8Es5aR4oYCWcX6JQs7KFe2ioqDxLZLP9bfeRM0vSaTtLatotG8AANGwAAAAAAAAAAAAAAAAAAAAAAAAAABkt1B14KpJRhnzm+4xgCeWfEulW9tCl+kbS3wl1PmocU2E7CrGg5+Na2yupBAWP6m+2yH3Nd932TcpNt5b3Z8AK6YAAAlfDOv21lY+IuXNyT2wuwigN6Xmk7w1tWLRtKwY8U6Vy4l41567L5kL1qVvUv51bWXNTnv03Xr+PtNIG2TNbJG0taY4pO8M1ndVrSvGtQm4yi/eS/S+LaU0oXkHGX7yIUDGPLanZm+Ot+6zoa1ptSPMrmPxMF5xFptvDPjeeXciuATzq7+SP8Ap6u9rvElzfxdGj+io9Gl1Z1tF4hsbTTqVCrKcpRXZj8SFgirnvFuZvOKsxsmmtcQafeadUo03JSw8Zxv5rX4kLANMmSbzvLNKRSNoAAaN2xptSNK/oVZvEYVFJv1MnMuLNNzt4x+xFfAlx5rY+zS+OL90o4p1m01KwjCjKSkn0fbuRcA1vebzvLNaxWNoAAaNgmmj8RWFnp1GhUc5SjFJ4XoIWDfHknHO8Nb0i0bSntzxPplW2qU06icotLOCByxzPDys9T4DOTLbJ3YpSKdg6+ja9d6dLCk6lPpytnIBpW01neG0xExtKwbLiiwuceM/RSxum1+J0Fq+nNJ+Ux9iZVwLMau8d0M6eqza+uaXSjzSuk/Qk8nE1Pi6HI4WVJ83TmkQ0GttTeY8mYwVhmu7qvd1XUr1HN57ewwgFeZ3TBt6bf3On11Vt5tPtXYzUBmJmOsExum2n8YUKjxd0uR7ecu07FHW9MrxzC6gvQ+pWILFdVeO/VDOCsrS/OunLrdQRr3XEWlUI83lKqPuj1K1BmdXbyaxp6+aTa9xP5bSlb0KCVJprMuu6wRkAr3vN53lNWsVjaAAGrYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM1v5NiXj3V9HJj8TCANxfmzG6un6nH5H3Ol4xyXPr5l8jSBndjZvZ0vGOS5z3qS+QUtKXWndP/MvkaIG5s3k9Kxh07r186+R8f5r/duvtx+RpAbmzezpeMcl1nv5l8hnS+XHJc+vmWfgaIG5s3s6Xj6N19pfIw3XkfJHybx3Nnfnaawa4G5sAAwy2dNtJ3t3GhB4bTeTZ1nSp6cqblPn5spvGMP+vgb3DUI21lcahPsTUfZuZZVqmscPNTfjLmlJ+t4/2z7yaKRy+qObTv6I0D6k28JbnaoaNRhR8be3MaSwvNcuX559xHWs27N5mIcQ3NJs1fXXiXU5EouXr9B1LXQbe55qtC6VSlH6sWm/fj8Dn2Niquq1LRzkuRyWY7N4M8kxMbsc0T2eFZxhqys5y5o8yWV2mXiGyo2N5ClRTSlTUnl533FOirfXqdJSlLE4vL67rJtcZ/tKj/Ij8Wbcscsyxv8AFDhg69tpdCNuq97cKmn9VSS+/f4C70qn5K7mzrKpBZyuZS6dd9vvRryWZ5ocg+xTk0km29kkfDs8KWsa13OtOPNGlHZelmK15p2Zmdo3fLXQa06aqXFWFFNZw/xz/uZamg05U5St7+jJr6rkn96+Rp67f1L29n536GEnGEV0wu00aVSdKanTnKEl0aZvM0jpENYi09dyrTlSqzpTWJQbi16UeDYs7avfXPJTTlJ+dKXd6Wdael6bbuNO6vMVGs+bUW3rWHg0isyzNohwQdDVNNdpTjXp1PGUZPCbWGn+JtadoivdL8qhVcZptPm+isMzyW32OaNt3FB3YaVp1R+Kp3blV/wzT39WPxOVUs60L7yNpeM5uVb7esxNJhmLRLXB3KmkWdrGKvLnEpLopqP3YbNHVbOjaypujW8ZCom1unj2rqJpMd2ItEtEHS1jT4WVOhODqfpM5U8dmPmNE06N/KopOS5MfRffn5DknflOaNt2LR7WneXE6dRz2hzJReG3lGG+oxo31ahT5moTcVndvDwb/DeYatKMWmuWSee1GSnQtaut3U7mv4vkuPNjtmT5n3+r7zfk3rDHNtMuVcW9ag0q1KUG1lZXU3bDTadzp9W6lccjhnEcZ6LO52uI6NjUlSVes6c4Q2Sklld/3HFsbGNfTatxz1Fy82UumyzuJpy227sRbeu7mg6WhadHUa86cpSXLj6LXa/Sbb0iyoT8TdXcPHdqjVSXwZrFJmN202iOjhA3tX0+VhWSUuenL6L+K+82dP0fxlurq7qeJotZWdsrvyY5Lb7HNG27kAkFvothdXEIW98nHPnecpP8Me45esWsLLUattBycYY3l16GZpMRuRaJnZpgA0bNqh5B4teOVxz9vK1j4HtPS8bxuvtR+RpAzuxs3c6X+7dfaj8j6npeN6d1n+NfI0QNzZvJ6X+5dfbXyGdK/cuvtL5GiBubN5PSsbwuvtr5HzOl/u3X2o/I0gNzZu50zH0br7S+RgufJsx8n8bjHnc+PwMIG7IADAAAAAAAAAAAAAAAAAAAAAAAAAAAAfYpykoxWW3hHw2tMnRpXkKtd+bDfCXVmYjeSUlrU7SjolOwubiNDmW+Xv1z3HjRLfT7WtOVHUY1HOOPFxkm8rt7Dg63eRvb3xsPoKKS2x6/vyalCrKjWhVg8ShJNE05Ii3SOyKKTMd3SqWituIIUZRag5qUMrse6+/Y2+N8+X0UsqHilhdifb+Bq61f0bt0q9GTVam9tn0/2fxNmrqllfUIwv6LU4+h4T701v7B8PWsM9eknBjflddZajyDSl/7ruF/jqfE3dCubTxlS3s6KUOXmc1nP37s5drd0rXiG4uKksQ554fXO/oNukRXr4teszJX/wD6eH8cP9KNniVQlrlopvli4Q5n3eczQq3VGWtxuVP9GnFt4fYkj7r95SvLulWoSeY01Fv0ps0m0cs/VttO8O5r1DT5yt1d1nTShiCVXC9P1Xv0NexraVZQqQo14tVEs81RvddPqo16OoWN9axo6jlTj0bWPc109pgrvR7ejONGPjqkk0m5NtfckbzbrzRs1ivTaXJq48ZLGMZeMdDv8GVYKpcUZNJyjmK7/wCtveR4y2tepbV41qTxKP3kFLctt0lo3jZ9vqE7a7qUZppxk1usZXYzCSGd7pmpJSvf0dXGE2nt7UeW9EtU5wcKs10xzS+OxtNI8J6MRafJ74PUVG4l9fKT9C3/ANzgVpSnVnObblKTbb7WbllqDttRncxi/Fzb5oruN+T0W7ru5rVJU23mUY7Z9a+RnpasRE9mO07tl+dwXHxjalh9V2KW34Ix2dapR4QrODxu1n1ywaOralCtbxtLVONGPowsdyPVO/oLhydjKX6Vyylh/vZN+eN/sxyzt92npDa1Khhted2G7rtTybiF1o+c48ra9mMe451jVVG7p1ZdIvLNu/u6NbWfKpfpaOVlJdmOm5HE/Bt6t5j4nSurjS9XxUrT8RVWEsvD9/RnJ1XTqljOL5uenL6MsYN1UtCmlU8a446xy0n7MN+5mDW9Rp3dOnQox8ym9n2Yxsl95tfaY3nu1rvE7R2bvFbc7KyqYeHzZb9KieuDF+tPD+r+J5hf2WoafC2vOWEoY+tyvZdj6HvTdS02whVoUk/Pwufd9v3+5G8TE5Obdr15eXZo8NxmtYceXpGSlt0Ne/TWuVsr/wCQ/wDUZNFu6drfVKtSphSi0pNN53TNa8rRnqVWvB80XVck1275I945Ib7fE6XGOPzhRx/cRz72ZdCTWgX8u9SWP8p7vq+lalRp161dU500049JNe7c09N1Chb6RcWs889Ryxt3xwjeZiL7792vXl2ZuDv1ys9/7Ps9ZxripOrXnVm8ylJts6HD15Rs6taVafKpQwuvf6DmPdsimfhiG8R8Uy73EcuawoZw5KSzL0tGTiSVSOkWdOK/RtJza78bGjqt5Rr2NOnCopSTWyT2ST7zPp+sUvIVY31NVKS2Tazt8SSbRMzG/dptMRDU4clKOr0eXuln3M98U5/PtznrlZ9yOrpVfS430KNlb80555prOIrHe9zkcTvm1y5lnPM0/uRiY2x9/FmJ3u5oAIUgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAup3HqOmXH61byz6YZx6MppnDBtFphiY3d6esWltbSpWFBqbW0uVRSff1eTggC1pt3IiIAAasgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAda1v7BW1Ohc2nPyrDlhP3dGjkgzE7MTG7uw1Sws4T8ht2pTWHlfi22cWvVnWrTq1HmU3lngGZtMkREAANWQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//2Q==" width="52" height="52" style="object-fit:contain;border-radius:6px;flex-shrink:0" alt="Ad Hoc logo">
+      <div class="header-text">
+        <div class="title">Design Thinking Cheatsheet</div>
+        <div class="sub">Ad Hoc Agile Consulting · Human-centered innovation · quick reference</div>
+      </div>
+    </div>
+    <div class="header-badges">
+      <div class="hbadge"><div class="hbadge-val">5</div><div class="hbadge-lbl">Fases</div></div>
+      <div class="hbadge"><div class="hbadge-val">HMW</div><div class="hbadge-lbl">How might we</div></div>
+      <div class="hbadge"><div class="hbadge-val">MVP</div><div class="hbadge-lbl">Protótipo mínimo</div></div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- PROCESSO — 5 FASES -->
+    <div class="section-label">The 5 phases — non-linear iterative process</div>
+    <div class="process-flow">
+      <div class="phase">
+        <div class="phase-head ph1">
+          <div class="phase-num">PHASE 01</div>
+          <div class="phase-name">Empathize</div>
+          <div class="phase-en">Empathize</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-goal">Deeply understand the user</div>
+          <div class="phase-item pi1">Field observation</div>
+          <div class="phase-item pi1">In-depth interviews</div>
+          <div class="phase-item pi1">Usage diary</div>
+          <div class="phase-item pi1">Shadowing</div>
+          <div class="phase-item pi1">Empathy map</div>
+          <div class="phase-out po1">Raw insights</div>
+        </div>
+      </div>
+      <div class="phase-arrow">›</div>
+      <div class="phase">
+        <div class="phase-head ph2">
+          <div class="phase-num">PHASE 02</div>
+          <div class="phase-name">Define</div>
+          <div class="phase-en">Define</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-goal">Synthesize the right problem</div>
+          <div class="phase-item pi2">POV — Ponto de vista</div>
+          <div class="phase-item pi2">HMW — How might we</div>
+          <div class="phase-item pi2">Affinity mapping</div>
+          <div class="phase-item pi2">Persona + Jornada</div>
+          <div class="phase-item pi2">Insight statements</div>
+          <div class="phase-out po2">Problem Statement</div>
+        </div>
+      </div>
+      <div class="phase-arrow">›</div>
+      <div class="phase">
+        <div class="phase-head ph3">
+          <div class="phase-num">PHASE 03</div>
+          <div class="phase-name">Ideate</div>
+          <div class="phase-en">Ideate</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-goal">Generate many possible solutions</div>
+          <div class="phase-item pi3">Brainstorming</div>
+          <div class="phase-item pi3">Crazy 8s</div>
+          <div class="phase-item pi3">SCAMPER</div>
+          <div class="phase-item pi3">Worst possible idea</div>
+          <div class="phase-item pi3">Dot voting</div>
+          <div class="phase-out po3">Prioritized ideas</div>
+        </div>
+      </div>
+      <div class="phase-arrow">›</div>
+      <div class="phase">
+        <div class="phase-head ph4">
+          <div class="phase-num">PHASE 04</div>
+          <div class="phase-name">Prototype</div>
+          <div class="phase-en">Prototype</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-goal">Make ideas tangible and testable</div>
+          <div class="phase-item pi4">Paper prototype</div>
+          <div class="phase-item pi4">Wireframe</div>
+          <div class="phase-item pi4">Storyboard</div>
+          <div class="phase-item pi4">Role-playing</div>
+          <div class="phase-item pi4">Digital mockup</div>
+          <div class="phase-out po4">Testable prototype</div>
+        </div>
+      </div>
+      <div class="phase-arrow">›</div>
+      <div class="phase">
+        <div class="phase-head ph5">
+          <div class="phase-num">PHASE 05</div>
+          <div class="phase-name">Test</div>
+          <div class="phase-en">Test</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-goal">Learn from real users</div>
+          <div class="phase-item pi5">Test de usabilidade</div>
+          <div class="phase-item pi5">Think-aloud protocol</div>
+          <div class="phase-item pi5">A/B testing</div>
+          <div class="phase-item pi5">Post-use interviews</div>
+          <div class="phase-item pi5">Behavior analysis</div>
+          <div class="phase-out po5">Learnings + iteration</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:8px;font-size:10px;color:var(--ink3);text-align:center;background:var(--surface);border-radius:6px;padding:6px 12px;border:0.5px solid var(--border2)">
+      ↺ &nbsp;The process is <strong>iterative and non-linear</strong> — it is common and expected to return to earlier phases when learning from tests or discovering new insights
+    </div>
+
+    <hr class="divider">
+
+    <!-- MINDSET -->
+    <div class="section-label">Mindset — the 4 pillars of Design Thinking</div>
+    <div class="mindset-grid">
+      <div class="mindset-card">
+        <div class="mc-stripe ms1"></div>
+        <div class="mc-body">
+          <div class="mc-icon">🧠</div>
+          <div class="mc-name">Empathize radical</div>
+          <div class="mc-desc">Get out from behind the desk. Observe, listen, and feel the real needs of users — without judgment.</div>
+        </div>
+      </div>
+      <div class="mindset-card">
+        <div class="mc-stripe ms2"></div>
+        <div class="mc-body">
+          <div class="mc-icon">🔀</div>
+          <div class="mc-name">Diverge before converging</div>
+          <div class="mc-desc">Generate many ideas before judging. Quantity first, quality later. Avoid "yes, but...".</div>
+        </div>
+      </div>
+      <div class="mindset-card">
+        <div class="mc-stripe ms3"></div>
+        <div class="mc-body">
+          <div class="mc-icon">🧪</div>
+          <div class="mc-name">Prototype to learn</div>
+          <div class="mc-desc">Make something with your hands. A paper prototype that fails early is 100x cheaper than a product that fails late.</div>
+        </div>
+      </div>
+      <div class="mindset-card">
+        <div class="mc-stripe ms4"></div>
+        <div class="mc-body">
+          <div class="mc-icon">🔁</div>
+          <div class="mc-name">Embrace ambiguity</div>
+          <div class="mc-desc">The best problems have no obvious answer. Being comfortable with uncertainty is a prerequisite for innovation.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- DIVERGE / CONVERGE -->
+    <div class="section-label">Diverge → converge pattern</div>
+    <div class="dc-wrap">
+      <div class="dc-box">
+        <div class="dc-head dch-div">
+          <div class="dc-title">Divergir 🌊</div>
+          <div class="dc-sub">Expand possibilities · without judgment</div>
+        </div>
+        <div class="dc-body">
+          <div class="dc-item">Generate as many ideas as possible</div>
+          <div class="dc-item">Build on others' ideas ("yes, and...")</div>
+          <div class="dc-item">Ban criticism during generation</div>
+          <div class="dc-item">Encourage wild and impossible ideas</div>
+          <div class="dc-item">Quantity beats quality in this phase</div>
+        </div>
+      </div>
+      <div class="dc-middle">
+        <div class="dc-middle-icon">⟺</div>
+        <div class="dc-middle-lbl">tensão<br>criativa</div>
+      </div>
+      <div class="dc-box">
+        <div class="dc-head dch-con">
+          <div class="dc-title">Convergir 🎯</div>
+          <div class="dc-sub">Filter and decide · with criteria</div>
+        </div>
+        <div class="dc-body">
+          <div class="dc-item">Group similar ideas (affinity map)</div>
+          <div class="dc-item">Vote with dots (dot voting)</div>
+          <div class="dc-item">Evaluate with criteria: impact × feasibility</div>
+          <div class="dc-item">Select 1–3 ideas to prototype</div>
+          <div class="dc-item">Document what was discarded and why</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- MAPA DE EMPATIA + POV/HMW -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <div class="section-label">Empathy map</div>
+        <div class="empathy-map">
+          <div class="em-center">👤 &nbsp;Usuário — who are we observing?</div>
+          <div class="em-cell">
+            <div class="em-label" style="color:var(--f1)">👁 Vê</div>
+            <div class="em-items">
+              <div class="em-item">What do they see in their environment?</div>
+              <div class="em-item">Who influences their decisions?</div>
+              <div class="em-item">What does the market offer them?</div>
+            </div>
+          </div>
+          <div class="em-cell">
+            <div class="em-label" style="color:var(--f2)">👂 Ouve</div>
+            <div class="em-items">
+              <div class="em-item">What do friends and colleagues say?</div>
+              <div class="em-item">Who really influences them?</div>
+              <div class="em-item">What channels do they consume?</div>
+            </div>
+          </div>
+          <div class="em-cell">
+            <div class="em-label" style="color:var(--f3)">💬 Fala e faz</div>
+            <div class="em-items">
+              <div class="em-item">What do they say in public?</div>
+              <div class="em-item">How do they actually behave?</div>
+              <div class="em-item">Is there a contradiction between words and actions?</div>
+            </div>
+          </div>
+          <div class="em-cell">
+            <div class="em-label" style="color:var(--f4)">💭 Pensa e sente</div>
+            <div class="em-items">
+              <div class="em-item">What really matters to them?</div>
+              <div class="em-item">What are their worries?</div>
+              <div class="em-item">Dreams and aspirations?</div>
+            </div>
+          </div>
+          <div class="em-pain-gain">
+            <div class="em-cell eg-pain">
+              <div class="em-label egl-pain">😣 Dores</div>
+              <div class="em-items">
+                <div class="em-item">Fears and frustrations</div>
+                <div class="em-item">Obstacles in the way</div>
+                <div class="em-item">Risks they want to avoid</div>
+              </div>
+            </div>
+            <div class="em-cell eg-gain">
+              <div class="em-label egl-gain">🌟 Ganhos</div>
+              <div class="em-items">
+                <div class="em-item">Measures of success</div>
+                <div class="em-item">What they want to achieve</div>
+                <div class="em-item">How they define "good outcome"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">POV and HMW — synthesizing the problem</div>
+        <div class="statement-block">
+          <div class="sb-head sbh-pov">
+            <div class="sb-badge">POV</div>
+            <div class="sb-title">Point of View — problem statement</div>
+          </div>
+          <div class="sb-body">
+            <div class="sb-formula">
+              <span class="sb-var pov-var">[Usuário]</span> needs
+              <span class="sb-var pov-var">[necessidade]</span> porque
+              <span class="sb-var pov-var">[surprising insight]</span>
+            </div>
+            <div class="sb-ex-label">Exemplo</div>
+            <div class="sb-example">
+              <em>"Ana, gerente de projetos sobrecarregada, precisa enxergar o status real do time em segundos porque reuniões de 1h consomem seu tempo mais valioso sem gerar decisões."</em>
+            </div>
+          </div>
+        </div>
+        <div class="statement-block">
+          <div class="sb-head sbh-hmw">
+            <div class="sb-badge">HMW</div>
+            <div class="sb-title">How Might We — invitation to ideate</div>
+          </div>
+          <div class="sb-body">
+            <div class="sb-formula">
+              <span class="sb-var hmw-var">How might we</span>
+              [verbo de ação] [para quem] [de forma que] [benefício]?
+            </div>
+            <div class="sb-ex-label">Exemplos — cada HMW vira uma sessão de ideação</div>
+            <div class="sb-example">
+              · <em>"How might we mostrar o status do time para Ana em menos de 5 segundos?"</em><br>
+              · <em>"How might we eliminar reuniões de status sem perder visibilidade?"</em><br>
+              · <em>"How might we transformar dados do time em decisões automáticas?"</em>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- IDEAÇÃO — técnicas -->
+    <div class="section-label">Ideation techniques</div>
+    <div class="ideation-grid">
+      <div class="idea-card">
+        <div class="idea-head">
+          <div class="idea-num">TECHNIQUE 01</div>
+          <div class="idea-name">Brainstorming</div>
+        </div>
+        <div class="idea-body">
+          <div class="idea-desc">Free group ideation session. 4 rules: no judgment, quantity equals quality, build on others' ideas, encourage unusual ideas.</div>
+          <div class="idea-rule">⏱ 20–30 min · 4–8 pessoas · post-its</div>
+        </div>
+      </div>
+      <div class="idea-card">
+        <div class="idea-head">
+          <div class="idea-num">TECHNIQUE 02</div>
+          <div class="idea-name">Crazy 8s</div>
+        </div>
+        <div class="idea-body">
+          <div class="idea-desc">Each person folds paper into 8 parts and sketches 8 different ideas in 8 minutes (1 min per sketch). Forces fast individual divergence before the group.</div>
+          <div class="idea-rule">⏱ 8 min · individual · caneta + papel</div>
+        </div>
+      </div>
+      <div class="idea-card">
+        <div class="idea-head">
+          <div class="idea-num">TECHNIQUE 03</div>
+          <div class="idea-name">SCAMPER</div>
+        </div>
+        <div class="idea-body">
+          <div class="idea-desc"><strong>S</strong>ubstitute · <strong>C</strong>ombine · <strong>A</strong>dapt · <strong>M</strong>odify · <strong>P</strong>ut to other uses · <strong>E</strong>liminate · <strong>R</strong>everse. Apply each verb to the problem.</div>
+          <div class="idea-rule">⏱ 30–45 min · structured adaptation</div>
+        </div>
+      </div>
+      <div class="idea-card">
+        <div class="idea-head">
+          <div class="idea-num">TECHNIQUE 04</div>
+          <div class="idea-name">Worst Possible Idea</div>
+        </div>
+        <div class="idea-body">
+          <div class="idea-desc">Deliberately generate the worst possible solutions to the problem. Then invert each bad idea to find valid solutions and unlock blocked creativity.</div>
+          <div class="idea-rule">⏱ 15 min · great for stuck groups</div>
+        </div>
+      </div>
+      <div class="idea-card">
+        <div class="idea-head">
+          <div class="idea-num">TECHNIQUE 05</div>
+          <div class="idea-name">Dot Voting</div>
+        </div>
+        <div class="idea-body">
+          <div class="idea-desc">Each participant receives 3–5 sticky dots (or votes) to distribute among preferred ideas. Fast, democratic and visual. Selects ideas with the most potential.</div>
+          <div class="idea-rule">⏱ 5–10 min · silent convergence</div>
+        </div>
+      </div>
+      <div class="idea-card">
+        <div class="idea-head">
+          <div class="idea-num">TECHNIQUE 06</div>
+          <div class="idea-name">Impact × Effort Matrix</div>
+        </div>
+        <div class="idea-body">
+          <div class="idea-desc">Map selected ideas into 4 quadrants: Quick Wins (high impact, low effort) · Big projects · Fill-ins · Thankless tasks. Prioritize quick wins.</div>
+          <div class="idea-rule">⏱ 20 min · rational prioritization</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- PROTOTIPAGEM -->
+    <div class="section-label">Prototype types — from idea to testable</div>
+    <div class="proto-grid">
+      <div class="proto-card">
+        <div class="proto-head">
+          <div class="proto-fid">LOW FIDELITY</div>
+          <div class="proto-name">Paper Prototype</div>
+        </div>
+        <div class="proto-body">
+          <div class="proto-desc">Hand-drawn screens on paper. Fast, cheap, disposable. Allows testing flows without code or design.</div>
+          <div class="proto-when">→ Use early in ideation</div>
+        </div>
+      </div>
+      <div class="proto-card">
+        <div class="proto-head">
+          <div class="proto-fid">LOW FIDELITY</div>
+          <div class="proto-name">Storyboard</div>
+        </div>
+        <div class="proto-body">
+          <div class="proto-desc">Sequence of frames illustrating the user journey with the solution. Ideal for validating context and narrative before the interface.</div>
+          <div class="proto-when">→ Use to validate the full flow</div>
+        </div>
+      </div>
+      <div class="proto-card">
+        <div class="proto-head">
+          <div class="proto-fid">MEDIUM FIDELITY</div>
+          <div class="proto-name">Wireframe Clicável</div>
+        </div>
+        <div class="proto-body">
+          <div class="proto-desc">Digital prototype without visual style (Figma, Balsamiq). Tests navigation and interaction logic without visual distractions.</div>
+          <div class="proto-when">→ Use to test usability</div>
+        </div>
+      </div>
+      <div class="proto-card">
+        <div class="proto-head">
+          <div class="proto-fid">HIGH FIDELITY</div>
+          <div class="proto-name">Mockup / MVP</div>
+        </div>
+        <div class="proto-body">
+          <div class="proto-desc">Prototype with final visuals or minimum viable product. Tests value perception, desirability and technical feasibility with real users.</div>
+          <div class="proto-when">→ Use to validate desire and value</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- TESTE — protocolo -->
+    <div class="section-label">User testing protocol</div>
+    <div class="test-steps">
+      <div class="ts-card">
+        <div class="ts-head">01 · PREPARE</div>
+        <div class="ts-body">
+          <div class="ts-text">Define hypotheses to test. Recruit 5 representative users. Prepare the task script without revealing the solution.</div>
+        </div>
+      </div>
+      <div class="ts-card">
+        <div class="ts-head">02 · CONTEXTUALIZE</div>
+        <div class="ts-body">
+          <div class="ts-text">Explain that you're testing the product, not the user. Ask them to think aloud. Don't help or lead their answers.</div>
+        </div>
+      </div>
+      <div class="ts-card">
+        <div class="ts-head">03 · OBSERVE</div>
+        <div class="ts-body">
+          <div class="ts-text">Note behaviors, hesitations, and errors. Separate observations from interpretations. One observer per task is ideal.</div>
+        </div>
+      </div>
+      <div class="ts-card">
+        <div class="ts-head">04 · DEBRIEF</div>
+        <div class="ts-body">
+          <div class="ts-text">Ask about the overall experience. Explore moments of confusion. Ask "why" more than "what". Don't defend the prototype.</div>
+        </div>
+      </div>
+      <div class="ts-card">
+        <div class="ts-head">05 · SYNTHESIZE</div>
+        <div class="ts-body">
+          <div class="ts-text">Group findings by pattern. Separate critical, moderate and minor issues. Define what to iterate before the next cycle. Document learnings.</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:8px;font-size:10px;color:var(--ink3);background:var(--surface);border-radius:6px;padding:7px 12px;border:0.5px solid var(--border2)">
+      💡 <strong>Nielsen's Rule:</strong> 5 users reveal ~85% of usability issues in an interface. You don't need to test with dozens of people to get valuable insights.
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">
+      <div class="footer-logo-dot"></div>
+      <span class="footer-txt">Ad Hoc Agile Consulting · Lean processes. Strong teams.</span>
+    </div>
+    <div class="footer-right">adhocagile.com</div>
+  </div>
+
+</div>
+</body>
+</html>
